@@ -1,0 +1,14 @@
+Release Notes:
+
+v0.8.2
+* Fixes:
+    * Fixed shader compilation errors on Android (gles3)
+
+v0.8.1
+* Fixes:
+    * Fixed Unity Editor tools related script errors
+* Improvements:
+    * Added support for creation of Impostor shaders through Amplify Shader Editor (wip)
+
+v0.8.0
+* Initial Release
