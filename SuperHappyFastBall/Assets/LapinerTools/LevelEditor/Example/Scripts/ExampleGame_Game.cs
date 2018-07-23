@@ -50,7 +50,7 @@ namespace LE_LevelEditor.Example
 				uMyGUI_PopupManager.Instance.HidePopup(uMyGUI_PopupManager.POPUP_LOADING);
 
 				// find player start position
-				GameObject goPlayerStart = GameObject.Find("Objects/PlayerStartPosition");
+				/*GameObject goPlayerStart = GameObject.Find("Objects/PlayerStartPosition");
 				if (goPlayerStart != null)
 				{
 					PLAYER.transform.position = goPlayerStart.transform.position + goPlayerStart.transform.up;
@@ -59,7 +59,7 @@ namespace LE_LevelEditor.Example
 				else
 				{
 					Debug.LogError("ExampleGame_Game: could not find a PlayerStartPosition GameObject!");
-				}
+				}*/
 			}, true);
 		}
 

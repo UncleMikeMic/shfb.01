@@ -234,13 +234,11 @@ namespace LE_LevelEditor.Example
 		private bool IsLevelPlayable(out string o_errorMessage)
 		{
 			// check if player position is defined
-			GameObject goPlayerStart = GameObject.Find("Objects/PlayerStartPosition");
+		//	GameObject goPlayerStart = GameObject.Find("Objects/PlayerStartPosition");
 			if (goPlayerStart == null)
 			{
-				o_errorMessage = "You must define the\n<b>player start position</b>\nfor this level!\n" +
-					"1. Go to Objects->GameLogic in the right window.\n" +
-					"2. Drag and drop the player capsule into the level.";
-				return false;
+                o_errorMessage = "";
+                return true;
 			}
 			o_errorMessage = "";
 			return true;
