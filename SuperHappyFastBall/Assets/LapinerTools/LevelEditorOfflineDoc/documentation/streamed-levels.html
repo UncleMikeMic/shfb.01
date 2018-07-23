@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="streamed-levels">
+<h1 class="page-title">Streamed Levels</h1>
+<p><strong><big>Streamed Objects</big></strong></p>
+Level streaming can be enabled for single object ('<em>LE_Object</em>') prefabs. If the level streaming property of an object is true, then this object will be instantiated only if it is closer to the 'Main Camera' than the given instantiate distance. This way a level can be loaded stepwise. Additionally, performance is improved by destroying this object when it is further away from the camera than the given destroy distance. You can find more information about streamed objects in the documentation of the <a href="level-objects.html#le_obj_inspector_streamed_levels_v1_10">'<em>LE_Object</em>' inspector here</a>.
+<br />
+<br />
+
+The instantiate/destroy distance can be set separately for editor and game. For example, if you have a foggy environment in the game you can set a very small distance, but in the editor you could have the fog effect disabled. To be able to see the whole setting from far away you should set higher distances for the editor than for the game. Another available property is the update frequency. This value tells how many frames pass between visibility checks. If the camera moves very fast in your game and you see objects popping out too close to the camera, but you have already a high instantiate distance, then you should reduce the update frequency.
+<br />
+<br />
+Finally, there is the cache transformation property. If this property is true, then position, rotation and scale are cached when spawned objects are destroyed because the object is too far away. The object will be instantiated with the transformation, which it had when it was destroyed, when it is close enough again. On the one hand, you can save the state of your world. For example, if a box was moved by the player you could want to save its position even if it is not visible. On the other hand, if you want to spawn all the enemies again once the player leaves an area and comes back later then you might also want to reset the positions of the enemies when the player gets too far away.
+
+<br />
+<br />
+<br />
+</body>
+</html>

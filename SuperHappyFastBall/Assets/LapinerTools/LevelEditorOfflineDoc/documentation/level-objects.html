@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="level-objects">
+<h1 class="page-title">Create/Add/Remove Level Objects</h1>
+<p><strong><big>Summary</big></strong></p>
+To add a new object to your level editor you have to attach and setup a '<em>LE_Object</em>' script to your new object. Then you have to add the new level object to the object map hierarchy in order to make the object appear in the object selection of the level editor.<br /><br />
+
+<p><strong><big>Step 1: Create LE_Object</big></strong></p>
+To add a new level object to your level editor select the root of your new object and add a '<em>LE_Object</em>' script to it.<br />
+<img src="HowToCreateLE_Object1.png" border="0" title="Search LE_Object in 'Add Component' menu" /><br /><br />
+
+<p><strong><big>Step 2: Setup LE_Object</big></strong></p>
+<table>
+<tr><td class="my_table">
+General properties of the '<em>LE_Object</em>':<br />
+<ul>
+  <li type="disc">
+    <b>Icon Path:</b> Resource path of the object's icon texture, which will be displayed in the object selection. The texture will be generated from Unity's built-in preview and this property will be set automatically later. However, if you want to set custom icons you can use this property. There is no direct reference (only a string) to the texture here, because there is no need to load the texture outside the level editor (no icon needed ingame).
+  </li>
+  <li type="disc">
+    <b>Max. Instances:</b> if value is not 0 then the number of instances of this object in a level will be limited to the value of this property. For example if some of your objects are very detailed then you will want to limit the maximal count, because of performance reasons. Another example is the start position of the player, since it should exist only once. No more objects of this type can be drag&dropped or cloned into the level once the limit is reached.
+  </li>
+  <li type="disc">
+    <b>Is Color:</b> a color picker will be displayed in the level editor if this value is set to true. Additionally, a default color can be specified in the 'Color' property. Modifies the '_Color' property of all materials in all renderers including those in children.
+  </li>
+  <li type="disc">
+    <b>Color:</b> default color. Will be applied only if 'Is With Color Property' is set to true. Modifies the '_Color' property of all materials in all renderers including those in children.
+  </li>
+</ul>
+Translation properties of the '<em>LE_Object</em>':<br />
+<ul>
+  <li type="disc">
+    <b>Is Movable:</b> move handle will be displayed when this object is selected in the level editor if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Movable On X:</b> move handle will have x axis if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Movable On Y:</b> move handle will have y axis if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Movable On Z:</b> move handle will have z axis if this property is true.
+  </li>
+</ul>
+Rotation properties of the '<em>LE_Object</em>':<br />
+<ul>
+  <li type="disc">
+    <b>Euler Rotation [X,Y,Z] Randomizer:</b> if greater than 0 then the euler rotation (0°-360°) on the [X, Y, Z] axis of this object will be randomized when the object is placed. The euler rotation will be increased or decreased by a value between 0 and +- half of the value. For example, trees can use this value to make a forest look more varied.
+  </li>
+  <li type="disc">
+    <b>Is Normal Oriented Placement:</b> if true the object will be rotated to fit the surface normal when placed. For example when a car is drag and dropped on a steep hill the player will probably want it to touch the ground with all four wheels and not hang half in the hill. With this property set to true the car will be rotated so that its up vector will be equal to the normal of the hill. Applied also if the object is not marked as rotatable.
+  </li>
+  <li type="disc">
+    <b>Is Rotatable:</b> rotate handle will be displayed when this object is selected in the level editor if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Rotatable Around X:</b> rotate handle will have x axis if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Rotatable Around Y:</b> rotate handle will have y axis if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Rotatable Around Z:</b> rotate handle will have z axis if this property is true.
+  </li>
+</ul>
+Scale properties of the '<em>LE_Object</em>':<br />
+<ul>
+  <li type="disc">
+    <b>Uniform Scale Randomizer:</b> if this value is greater than 0 then the scale of this object will be randomized when the object is placed. The random scale change is always uniform, but applied only on scaleable axes. The scale will be increased or descresed by a value between 0 and +- half of the value. For example trees can use this value to make a forest look more varied.
+  </li>
+  <li type="disc">
+    <b>Is Uniform Scale:</b> if this property is true then the scale handle will have only one axis. Scaling this axis will scale the object on all scaleable axes at same rate.
+  </li>
+  <li type="disc">
+    <b>Is Scaleable:</b> scale handle will be displayed when this object is selected in the level editor if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Scaleable On X:</b> scale handle will have x axis if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Scaleable On Y:</b> scale handle will have y axis if this property is true.
+  </li>
+  <li type="disc">
+    <b>Is Scaleable On Z:</b> scale handle will have z axis if this property is true.
+  </li>
+</ul>
+</td><td>
+&nbsp;
+</td><td valign="top">
+<img src="HowToSetupLE_Object_SNAP_DISABLED.png" border="0" title="LE_Object inspector with snap mode SNAP_DISABLED" />
+</td></tr>
+</table>
+Physics properties of the '<em>LE_Object</em>':<br />
+<ul>
+  <li type="disc">
+    <b>Is Sleeping On Start:</b> if true and a rigidbody is attached to this object or its children then all attached rigidbodies will go into the sleep state (<em>Rigidbody.Sleep()</em>) when the level is loaded. This will increase performance in the first few frames if you level has many rigidbodies. For example if you have a pile of crates you don't want them to fall down before the player touches them, therefore you will want them to sleep. However, if you have a huge snowball that has to roll behind the player you will probably not want to send it to sleep.
+  </li>
+  <li type="disc">
+    <b>Is Sleeping On Start Editable:</b> When this object is selected in the editor then a property is presented to the end user that allows to change 'Is Sleeping On Start' if this property is true.
+  </li>
+</ul>
+<a name="le_obj_inspector_streamed_levels_v1_10"></a>Level streaming properties of the '<em>LE_Object</em>':<br />
+<ul>
+  <li type="disc">
+    <b>Level Streaming Enabled:</b> if this property is true then this object will be instantiated only if it is closer to the 'Main Camera' than the given instantiate distance. This way a level can be loaded stepwise. Additionally, performance is improved by destroying this object when it is further away from the camera than the given destroy distance.
+  </li>
+  <li type="disc">
+    <b>Update Frequency:</b> defines the number of skipped frames between streamed object state updates. A low value should be used for fast games. However a low value (e.g. '0') will have performance implications if the number of streamed objects is very high (>300). A slow game can have a higher value. The value of '15' (with 30 FPS in average) means that streamed objects will be checked twice in a second which is fast enough for slow games.
+  </li>
+ <li type="disc">
+    <b>Instantiate Distance:</b> this object will be instantiated if it is closer to the camera than the given distance. This value is used ingame.
+  </li>
+  <li type="disc">
+    <b>Destroy Distance:</b> this object will be destroyed if it is further away from the camera than the given distance. This value is used ingame.
+  </li>
+ <li type="disc">
+    <b>Instantiate Distance(Editor):</b> this object will be instantiated if it is closer to the camera than the given distance. This value is used in the editor.
+  </li>
+  <li type="disc">
+    <b>Destroy Distance(Editor):</b> this object will be destroyed if it is further away from the camera than the given distance. This value is used in the editor.
+  </li>
+ <li type="disc">
+    <b>Cache Transformation:</b> if this property is true then position, rotation and scale are cached when spawned objects are destroyed because they are too far away. The object will be instantiated with the transformation, which it had when it was destroyed, when it is close enough again.
+  </li>
+</ul>
+<a name="le_obj_inspector_snap_v1_10"></a>Snap properties of the '<em>LE_Object</em>':<br />
+<ul>
+  <li type="disc">
+    <b>SNAP_DISABLED:</b> by default the snapping feature is disabled.
+  </li>
+  <li type="disc">
+    <b>SNAP_TO_TERRAIN:</b> object will snap to terrain every time the terrain is changed or the object is moved. If normal oriented placement is active then the object's orientation will be changed accordingly after every terrain change or object's position change.
+  </li>
+  <li type="disc">
+    <b>SNAP_TO_OBJECT:</b> in this snap mode it is possible to snap other objects to this level object.
+<table>
+<tr><td>
+<img src="HowToSetupLE_Object_SNAP_TO_OBJECT.png" border="0" title="LE_Object inspector with snap mode SNAP_TO_OBJECT" />
+</td><td class="my_table">
+<ul>
+  <li type="circle">
+    <b>Snap Points:</b> This array contains definitions of snap points for the 'Snap To Object' feature. A snap point defines the root location of the snap point and the objects which can be snapped to this point. The local transformation in the space of the point can be set for each snap object individually.
+  </li>
+  <li type="circle">
+    <b>Root Snap Point:</b> if set to a value different from '-1' then the snap point at given index will be deactivated when this object is created through being snapped to another object.
+  </li>
+  <li type="circle">
+    <b>Built In UI:</b> if set to 'true' then the built in UI for the snap object selection will be drawn. It uses the 'SnapToObjectUI' material from the resource folder.
+  </li>
+</ul>
+</td></tr>
+</table>
+  </li>
+  <li type="disc">
+    <b>SNAP_TO_3D_GRID:</b> object can be placed only within the given grid on all axes.
+    <ul>
+      <li type="circle">
+        <b>Grid Offset:</b> Defines the offset of the snap grid.
+      </li>
+      <li type="circle">
+        <b>Grid Cell Size:</b> Defines the cell size of the snap grid.
+      </li>
+    </ul>
+  </li>
+  <li type="disc">
+    <b>SNAP_TO_2D_GRID_AND_TERRAIN:</b> object can be placed only within the given grid on the x and z axes. The y axis value is defined by the terrain.
+    <ul>
+      <li type="circle">
+        <b>Grid Offset:</b> Defines the offset of the snap grid.
+      </li>
+      <li type="circle">
+        <b>Grid Cell Size:</b> Defines the cell size of the snap grid.
+      </li>
+    </ul>
+  </li>
+</ul>
+<a name="le_obj_inspector_variations_v1_30"></a>Variations properties of the '<em>LE_Object</em>' (added in v1.30):<br />
+<ul>
+  <li type="disc">
+    <b>NONE:</b> by default the variation feature is disabled.
+  </li>
+  <li type="disc">
+    <b>REPLACE_MATERIALS:</b> will replace all materials of the selected renderers in this level objects. The player will be able to choose between these variations if he selects an instance of this level object in the scene.
+    <ul>
+      <li type="circle">
+        <b>Variation Default Index:</b> when a new object is placed in the scene, then the variation from the Variations property with the index Variations Default Index will be selected. This property is ignored if no variations or exactly one variation were provided for the Variations property.
+      </li>
+      <li type="circle">
+        <b>Name:</b> the name of this variation. It will be shown to the player/user.
+      </li>
+    </ul>
+  </li>
+  <li type="disc">
+    <b>ACTIVE_DEACTIVATE_OBJECTS:</b> will activate/deactivate sub objects of this level object. The player will be able to choose between these variations if he selects an instance of this level object in the scene.
+    <ul>
+      <li type="circle">
+        <b>Variation Default Index:</b> when a new object is placed in the scene, then the variation from the Variations property with the index Variations Default Index will be selected. This property is ignored if no variations or exactly one variation were provided for the Variations property.
+      </li>
+      <li type="circle">
+        <b>Name:</b> the name of this variation. It will be shown to the player/user.
+      </li>
+    </ul>
+  </li>
+</ul>
+<img src="HowToSetupLE_Object_VARIATION.png" border="0" title="LE_Object inspector with variations enabled" />
+<br /><br />
+Take into account that all level objects must have a collider attached (at root or in children). Without colliders a level object cannot be selected in the edit mode. If you need an object without colliders in the game mode then consider creating a script that will destroy the collider when the level is loaded in play mode.<br />
+<img src="HowToSetupLE_Object2.png" border="0" title="Add a collider to your object" /><br /><br />
+When you have finished your new level object you need to create a prefab of it (simply drag and drop it into your project). Be aware that all level object prefabs must be placed in a resource folder otherwise it would be impossible to load them on runtime.<br />
+<img src="HowToSetupLE_Object3_v1_10.png" border="0" title="Create a prefab of your object in the 'Resources' folder" /><br /><br />
+
+<p><strong><big>Step 3: Add LE_Object To The Object Map</big></strong></p>
+To make your new object appear in the object selection of the level editor you need to add it to an object map. If you want to create a new category of objects you will need to create a new object map. You can do this by duplicating an existing object map and removing all elemnts from the new object map. The name of the category will be the name of the object map. If the name of the object map contains a '_' then the name of the category will be the substring of the object map's name that is placed before the underscore.<br />
+<img src="HowToAddLE_ObjectToObjectMap1.png" border="0" title="Duplicate the existing Object Map to create a new one" /><br /><br />
+Once you have created a new object map you will need to add your level object to it. When the 'Icon Path' is not specified. Then you will see an error message telling you that you need to render the object icon. If you use the free version of the Unity Editor then it will be likely that you will see an error message in the console when you click on the 'Render Missing Icons' button. Simply click the button again and everything should work fine on the second try. The level object icon will be generated from Unity's preview image. The level icon will be placed in the same resource folder as the level object, but into another subfolder. Simply type the name of the level object in the search field and you will find a texture with the same name.<br />
+<img src="HowToAddLE_ObjectToObjectMap2.png" border="0" title="Drag and drop your prefab into the new Object Map" /><br /><br />
+
+<p><strong><big>Step 4: Manage A Level Object Map Hierarchy</big></strong></p>
+Your new object map is not included in the object map hierarchy yet and therefore you will not find your new object in the level editor object selection. In the example below we add the new object map to the root object map. Object maps can have other object maps as children (like the root object map), which makes them to inner nodes of the object map hierarchy. Leave nodes of the object map hierarchy are object maps that contain at least one level object. In this case other object maps attached to this object map will be ignored.<br />
+<img src="HowToManageALevelObjectMapHierarchy1.png" border="0" title="Drag and drop your new Object Map into the existing one" /><br /><br />
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="count-level-objects">
+<h1 class="page-title">Perform Actions After Level Object Placement</h1>
+<p><strong><big>Summary</big></strong></p>
+With the '<em>LE_EventInterface.OnObjectPlaced</em>' event you can realise features like a general object count limit for each level or a shop system that reduces the players money when an object is placed. To limit further object placement take a look at <a href="level-object-placement-limitation.html">this article</a>.<br /><br />
+
+<p><strong><big>Step 1: Event Registration</big></strong></p>
+Register for the '<em>LE_EventInterface.OnObjectPlaced</em>' event. This event will be called every time a new object is placed through drag and drop or duplicate within the object editor. Keep in mind that you also should unregister the event handler when your script gets destroyed otherwise a memory leak could occur.
+<code>
+using LE_LevelEditor.Events;
+</code>
+<code>
+<p class="my_code_comment">// Register for the load event, which is called when the level is loaded</p>
+LE_EventInterface.OnObjectPlaced+= OnObjectPlaced;
+</code>
+
+<p><strong><big>Step 2: Event Handling</big></strong></p>
+In the event handler you could increase some object counter or reduce the ingame money of the user. For example you could limit the overall number of object per level. You could also decrease the money of the user and disallow further object placement when all money is used. To disallow further object placement take a look at <a href="level-object-placement-limitation.html">this article</a>.
+<code>
+private void OnObjectPlaced(object p_sender, LE_ObjectPlacedEvent p_args)<br />
+{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// do something here. To get a reference to the placed object take a look at the LE_ObjectPlacedEvent event args</p>
+&nbsp;&nbsp;&nbsp;
+	...<br />
+};
+</code>
+</body>
+</html>

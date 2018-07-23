@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a4a57d5f1ef574d8ba81bc5ffbbb04, type: 3}
+  m_Name: Simple Shapes_ObjectMap
+  m_EditorClassIdentifier: 
+  m_objectPrefabs:
+  - {fileID: 11400000, guid: 26dfe9b14ec48bf478930cfbe959ec52, type: 2}
+  - {fileID: 11400000, guid: 740f1d6b6da09ec489e951a951bdd7ad, type: 2}
+  - {fileID: 11400000, guid: 4daa2a612800fad47b0fb766eefa23ed, type: 2}
+  - {fileID: 11400000, guid: 41e98d19b350401488a0ee5d2ed4ea55, type: 2}
+  - {fileID: 11400000, guid: d451139a17a54c9458fb08b2b6184b58, type: 2}
+  - {fileID: 11400000, guid: 6a6b85535f9c3e94f83da829db4601be, type: 2}
+  - {fileID: 11400000, guid: 13f5cb6ca4e455645b9cc1c2d7699cae, type: 2}
+  m_objectPrefabResourcePaths:
+  - Objects/Simple Shapes/Moveable/CubeWRigidbody
+  - Objects/Simple Shapes/Moveable/SphereWRigidbody
+  - Objects/Simple Shapes/Moveable/CylinderWRigidbody
+  - Objects/Simple Shapes/Moveable/CapsuleWRigidbody
+  - Objects/Simple Shapes/Moveable/CylinderWRigidbodyLong
+  - Objects/Simple Shapes/Moveable/CylinderWRigidbodyVeryLong
+  - Objects/Simple Shapes/Moveable/ConeWRigidbody
+  m_subObjectMaps: []

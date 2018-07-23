@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="snap-modes">
+<h1 class="page-title">Object Snap Modes</h1>
+<p><strong><big>Summary</big></strong></p>
+The snap mode can be set for each level object ('<em>LE_Object</em>'). Four snap modes are available and will be introduced in more detail below. You can also find more information about snap modes in the documentation of the <a href="level-objects.html#le_obj_inspector_snap_v1_10">'<em>LE_Object</em>' inspector here</a>.
+
+<br />
+<br />
+<br />
+<p><strong><big>SNAP_TO_TERRAIN</big></strong></p>
+In this snap mode object will snap to terrain every time the terrain is changed or the object is moved. If normal oriented placement is active then the object's orientation will be changed accordingly after every terrain change or object's position change. New objects can be placed only on top of a terrain. With terrain snapping enabled objects cannot be moved on the y axis after placement. Besides, they cannot be rotated on the x and z axis if normal oriented placement is enabled. Placed object automatically correct their height and rotation (if normal oriented) when moved over the terrain.
+
+<br />
+<br />
+<br />
+<p><strong><big>SNAP_TO_OBJECT</big></strong></p>
+In this snap mode it is possible to snap other objects to this level object. Once this snap mode is activated additional properties (snap points, root snap point, built in UI) appear in the inspector. Each entry of the snap points array defines the root location of the snap point and the objects which can be snapped to this point. The local transformation in the space of the point can be set for each snap object individually. Also the 3d preview model scale and rotation are defined for each entry.
+<br />
+<br />
+In many cases object can be snapped in at least two directions. For example a piece of a road can have a road part snapped in front or in the back. In this case the right snap point of the attached road object needs to be disabled. In the prior example if a road part is enlarged with a new forward going road piece , then the back direction of the new road piece is snapped to the existing road piece and the back snap point of the new road piece needs to be disabled. This can be done with the root snap point. If the root snap point is set to a value different from '-1' then the snap point at given index will be deactivated when this object is created through being snapped to another object.
+<br />
+<br />
+Finally, there is the built in UI property. If it is set to 'true' then the built in UI for the snap object selection will be drawn. It uses the 'SnapToObjectUI' material from the resource folder. You can deactivate this property if you want to replace the UI that is drawn behind the preview instances of the snappable objects.
+
+<br />
+<br />
+<br />
+<p><strong><big>SNAP_TO_3D_GRID</big></strong></p>
+In this snap mode objects can be placed only within the given grid on all axes. Once this snap mode is activated additional properties (grid offset, grid cell size) appear in the inspector. New objects can be dragged and dropped only in a certain grid cell. When placed they can be moved like normal object, but they will snap to the closes grid cell as soon as they are not moved any more.
+
+
+<br />
+<br />
+<br />
+<p><strong><big>SNAP_TO_2D_GRID_AND_TERRAIN</big></strong></p>
+This is a combined snap mode (SNAP_TO_TERRAIN + SNAP_TO_3D_GRID). Objects can be placed only within the given grid on the x and z axes, but the y axis value is defined by the terrain. Read the SNAP_TO_TERRAIN and the SNAP_TO_3D_GRID descriptions above for more details.
+</body>
+</html>

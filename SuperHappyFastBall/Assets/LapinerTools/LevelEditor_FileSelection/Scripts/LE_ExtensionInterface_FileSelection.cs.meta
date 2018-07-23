@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bd587db55bd793644bbfac623c39495d
+labels:
+- Selection
+- Picker
+- Save/Load
+- Load
+- Save
+- Serialization
+- Serialisation
+- Level
+- File
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

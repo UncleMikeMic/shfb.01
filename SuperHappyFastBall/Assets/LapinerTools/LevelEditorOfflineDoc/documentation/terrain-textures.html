@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="terrain-textures">
+<h1 class="page-title">Add/Remove/Modify/Limit Terrain Textures</h1>
+<p><strong><big>Summary</big></strong></p>
+Terrain textures are defined in the scriptable object '<em>LE_TerrainTextureConfig</em>'. The terrain texture config has three arrays: textures, texture sizes and texture offsets. The '<em>LE_ConfigTerrain</em>', which is attached to the same game object as the '<em>LE_LevelEditorMain</em>', has a link to the texture config, which can be seen in the inspector. Additionally, the maximal amount of textures for a single level can be limited in the '<em>LE_ConfigTerrain</em>'. It is also possible to disable the base texture selection. The terrain texture config allows to reduce the level size, because the levels do not need to include the terrain textures. The serialized levels contain only an alphamap for every terrain texture. To assign the right alphamap to the right terrain texture when the level is loaded a terrain texture config is required.<br /><br />
+
+<p><strong><big>Step 1: Find Your Terrain Texture Config</big></strong></p>
+The scriptable object '<em>LE_TerrainTextureConfig</em>' is located in your project (not in a scene). A simple way to find it is to open the level editor scene, then select the '<em>LE_LevelEditorMain</em>' instance and double click on the '<em>Terrain Texture Config</em>' property of the attached '<em>LE_ConfigTerrain</em>' script in the inspector.<br />
+<img src="HowToFindTerrainTextureConfig_v1_20.png" border="0" title="How to add play button" /><br /><br />
+
+<p><strong><big>Step 2: Add/Remove/Modify Terrain Textures</big></strong></p>
+To add, remove or modify the terrain textures you have to change the arrays contained in the scriptable object '<em>LE_TerrainTextureConfig</em>'. The 'Terrain Textures' array contains references to the used textures. The 'Terrain Texture Sizes' array contains the size of each texture defined in the 'Terrain Textures' array. If the size is set to (10,10) then the texture will be repeated every 10 units. The 'Terrain Texture Offsets' array contains the offset of each texture defined in the 'Terrain Textures' array. Take a look at the <a href="http://docs.unity3d.com/Manual/terrain-Textures.html">Terrain Engine-Textures Unity manual</a> for more information on these values. One more important information is that all three arrays must have the same length, because the texture at index 0 will get the size and offsets from the 0 index of the corresponding arrays.<br /><br />
+
+<p><strong><big>Step 3: Limit The Number Of Terrain Textures Per Level</big></strong></p>
+If you have added many terrain textures to your game, then you should limit the maximal number of terrain textures that can be used in a single level. Otherwise users might generate very performance intensive levels by using all terrain textures that you have provided in a single level. To change the maximal terrain texture count you have to set the '<em>Max Texture Count</em>' property in the inspector of '<em>LE_ConfigTerrain</em>' of the same game object to which the '<em>LE_LevelEditorMain</em>' script is attached.<br /><br />
+
+<p><strong><big>Step 4: Disable Base Texture Selection</big></strong></p>
+If you want to use a specific texture as a base texture for all levels (for example a snow texture for a snowboarding game) then you should disable the base texture selection in the create terrain menu. Otherwise users could take a rock texture as the base texture, which would not fit to your snowboarding game. To disallow base texture selection set '<em>Is Base Texture Selection</em>' to false in the inspector of the '<em>LE_ConfigTerrain</em>' attached to the '<em>LE_LevelEditorMain</em>' instance.<br />
+The level editor is completely independent of the UI implementation. The behaviour described above is true for the built-in UI example. Setting this property to false will suppress the call of the '<em>LE_GUIInterface.Delegates.SetTerrainBaseTextures</em>' delegate. In the example UI the base texture selection is disabled by default and enabled as soon as the <em>SetTerrainBaseTextures</em>' is called. If you want to use a custom UI, then you can find more information in <a href="custom-ui.html">this article</a>.<br />
+</body>
+</html>

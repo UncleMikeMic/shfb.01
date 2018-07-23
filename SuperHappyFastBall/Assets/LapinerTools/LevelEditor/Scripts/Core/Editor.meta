@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 53b3acd36c1797d4199f5a484faae3d6
+labels:
+- Multiplatform
+- Runtime
+- Level
+- Editor
+- Serialisation
+- Serialization
+- Save
+- Load
+- Save/Load
+- Terrain
+- Objects
+folderAsset: yes
+DefaultImporter:
+  userData: 

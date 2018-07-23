@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="level-object-placement-limitation">
+<h1 class="page-title">Level Object Placement Limitation</h1>
+<p><strong><big>Summary</big></strong></p>
+It is possible to limit the area in which objects can be placed. It is also possible to set other criteria, not only positon. For example it is possible to prevent houses from being built on a very steep terrain. To limit the object placement you need to register for the on drag event of the object editor. This event will be raised every frame when there is an object dragged over something in the level. A test if the current location suits the defined criteria should be performed in the event handler implementation. If the location is not suitable you can optionally display an explanatory message to the user, which will be shown near the object icon.<br /><br />
+
+<p><strong><big>Step 1: Event Registration</big></strong></p>
+Register for the '<em>LE_EventInterface.OnObjectDragged</em>' event. This event will be called in every frame in which a user will try to place an object by dragging it to the right position. Keep in mind that you also should unregister the event handler when your script gets destroyed otherwise a memory leak could occur.
+<code>
+using LE_LevelEditor.Events;
+</code>
+<code>
+<p class="my_code_comment">// Register for the load event, which is called when the level is loaded</p>
+LE_EventInterface.OnObjectDragged += OnObjectDragged;
+</code>
+
+<p><strong><big>Step 2: Event Handling</big></strong></p>
+The event handler below will check if the current location is suitable for the object to be placed on. If this is not the case the '<em>p_args.IsObjectPlaceable</em>' property will be set to false. Optionally, a message can be shown to the player so that he knows why the object cannot be placed at the certain location.
+<code>
+private void OnObjectDragged(object p_sender, LE_ObjectDragEvent p_args)<br />
+{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// in this example we will check if the cursor position (the place where the object will be placed)<br />
+&nbsp;&nbsp;&nbsp;
+	// is too far away from the center of the level (outside a square with side length 200)<br />
+&nbsp;&nbsp;&nbsp;
+	// you can replace this with the check that you need to perform<br />
+&nbsp;&nbsp;&nbsp;
+	// take a look at the other members of LE_ObjectDragEvent<br />
+&nbsp;&nbsp;&nbsp;
+	// for example the object prefab is also passed within the event args</p>
+&nbsp;&nbsp;&nbsp;
+	if (Mathf.Abs(p_args.CursorHitInfo.point.x) > 100 ||<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    Mathf.Abs(p_args.CursorHitInfo.point.z) > 100)<br />
+&nbsp;&nbsp;&nbsp;
+	{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		// tell the level editor that this object cannot be placed at the current cursor position</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		p_args.IsObjectPlaceable = false;<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		// check if there is already a message that will be shown to the player<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		// this can be the case if some other listener of this event has added a message<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		// or if the instance count of this objects has reached its maximum</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		if (p_args.Message.Length > 0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			// add a line break if the message is not empty</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			p_args.Message += "\n";<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		}<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		// add your message here in this example the object is simply out of bounds</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		p_args.Message += "Object is out of bounds!";<br />
+&nbsp;&nbsp;&nbsp;
+	}<br />
+};
+</code>
+</body>
+</html>

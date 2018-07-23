@@ -1,0 +1,58 @@
+Patch v1.22 to v1.30:
+FEAT: undo/redo (terrain and object editing)
+FEAT: HUGE terrain height editing performance improvement (for Unity 5.2.2 or higher)
+FEAT: variations property: materials can be changed and child objects can be activated/deactivated on runtime
+FEAT: find button: instances of the selected prefab are selected and focused one after another
+FEAT: object are listed in groups, where each group demonstrates a certain editor feature
+
+Patch v1.20 to v1.22:
+FIX: icons rendered with the object map inspector had a gray background (instead of transparency) in Unity Pro
+FEAT: level objects drag&drop now works directly from the tree browser listing
+FEAT: optional random rotation on placement
+FEAT: added the OnObjectSelectedInScene event to LE_EventInterface
+
+Patch v1.10 to v1.20:
+FIX: multiple terrain load/save
+FIX: improved camera perspective gizmo positioning
+FIX: keep camera distance on perspective gizmo axis switch
+FIX: ctrl+D and object count limitation
+FIX: sometimes small objects were selected even if covered by bigger objects
+FIX: objects selected only if mouse down event is not over UI (fixes issues with color sliders)
+FEAT: upgraded to Unity 4.6.0
+FEAT: easily moddable uGUI replaces the old OnGUI (modability shown in 2 new demos)
+FEAT: 2nd demo: FPS dungeon game with object editor (selectable in menu)
+FEAT: 3rd demo: 9 patch terrain only editor (selectable in menu)
+FEAT: reduced loading time with terrain recycling in level editor
+FEAT: key combos like "f"-key and "ctrl+d" can be disabled in inspector
+FEAT: removed OnMouse* methods (now works with 'Input.simulateMouseWithTouches = false;' if you need it)
+FEAT: improved stacking of grid snapped objects
+FEAT: brush projected on editable terrain only
+API: all terrain related configuration values are moved to LE_ConfigTerrain
+API: all level related configuration values are moved to LE_ConfigLevel
+API: changed location of GetLoadEvent to LE_LevelEditorMain.GetLoadEvent
+API: removed 'additional level-tab/left-menu button system' (add to scene directly instead)
+
+Patch v1.01 to v1.10:
+FIX: works in Unity 5
+FIX: UnregisterAll. Now also all event handlers of OnObjectPlaced and OnObjectDragged are unregistered.
+FIX: crash when deleting all characters of a number input field (e.g. the terrain size)
+FIX: smoothing with high amount, but small brush (amount was not applied)
+FIX: camera direction jumping in demo game after screen tap on Windows Phone
+FEAT: level streaming (instantiate/destroy depending on camera distance, transformations are cached between destroy and reinstantiate)
+FEAT: terrain snapping (objects stay on terrain when terrain is raised/lowered, objects stay on terrain when moved)
+FEAT: object snapping (objects snap to other objects)
+FEAT: grid snapping (objects snap to a virtual grid)
+FEAT: limit XYZ movement/scale e.g. only XY (for movement, rotation and scale handles)
+FEAT: custom inspector for LE_Object
+FEAT: improved UI assets
+FEAT: terrain brush projection fits to cell size of terrain data
+FEAT: read terrain paint height button in paint terrain height tab of the terrain editor.
+FEAT: added OnTerrainCreated to LE_EventInterface.
+FEAT: duplicate level objects are removed on save (fix for players hitting clone too often). Feature can be disabled through LE_Config
+FEAT: E/Q keys (move up and down (just like in the Unity editor))
+FEAT: flag for moveable objects: is active on start editable by end user
+FEAT: adapt focus distance to object's renderer bounds
+FEAT: camera perspective gizmo
+FEAT: camera rotate around pivot (with mouse)
+FEAT: start with a predefined custom Unity terrain
+FEAT: configuration flag to hide terrain or object editor

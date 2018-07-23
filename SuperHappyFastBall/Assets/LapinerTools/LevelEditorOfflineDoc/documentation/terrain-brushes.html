@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="terrain-brushes">
+<h1 class="page-title">Add/Remove/Modify Terrain Brushes</h1>
+<p><strong><big>Terrain Brush Textures</big></strong></p>
+Terrain brushes are defined in the '<em>Brushes</em>' array property of the '<em>LE_ConfigTerrain</em>', which is attached to the '<em>LE_LevelEditorMain</em>' instance contained in the level editor scene. Terrain brushes are simple RGBA textures. The RGB color channel of a terrain brush texture has to be full white. The alpha channel defines the brush amount where 1 is the full brush value and 0 is no brush at all. A brush texture must have a one pixel border in its alpha channel. The border must have the value of 0 in its alpha channel. If you encounter any projector problems with your custom brush, where the brush texture is drawn all over the terrain you will need to make the 0 alpha channel border wider. Use exact the same import settings like they are used for the built-in brushes.
+</body>
+</html>

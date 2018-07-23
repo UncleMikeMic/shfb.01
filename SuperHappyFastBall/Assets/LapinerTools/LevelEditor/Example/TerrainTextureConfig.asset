@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 600cad02de336a546aa8ec694ce5256f, type: 3}
+  m_Name: TerrainTextureConfig
+  m_EditorClassIdentifier: 
+  m_terrainTextures:
+  - {fileID: 2800000, guid: c25a06c9c28fd4e4292b3e9a129715d5, type: 3}
+  - {fileID: 2800000, guid: 8d76c0974bfe14f39a626cde8db7fa8c, type: 3}
+  - {fileID: 2800000, guid: e13ad7a9d4dc84697aaa540e7548d65b, type: 3}
+  - {fileID: 2800000, guid: 81610d5a58249449683de3278e6b7a5a, type: 3}
+  - {fileID: 2800000, guid: 1cf0ffff99a8a45ff822b67a5f55bab2, type: 3}
+  - {fileID: 2800000, guid: c6141b18755094f808d9c85956b9c28a, type: 3}
+  m_terrainTextureSizes:
+  - {x: 10, y: 10}
+  - {x: 10, y: 10}
+  - {x: 15, y: 15}
+  - {x: 10, y: 10}
+  - {x: 10, y: 10}
+  - {x: 10, y: 10}
+  m_terrainTextureOffsets:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}

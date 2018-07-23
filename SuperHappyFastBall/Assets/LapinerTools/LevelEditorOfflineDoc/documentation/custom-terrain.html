@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="custom-terrain">
+<h1 class="page-title">Use A Custom Unity Terrain</h1>
+<p><strong><big>Static/Background Custom Unity Terrains</big></strong></p>
+You can add custom Unity terrains to your editor and/or game scenes. By default existing terrains will be used as not editable static background objects. If you want to allow the user to modify only a part of the terrain, then you could create your own background terrain, which is bigger than the user's terrain (or make a nine patch terrain where the centered terrain is the terrain that is modified by the user).
+<br />
+<br />
+<br />
+<p><strong><big>Default/Template Custom Unity Terrain</big></strong></p>
+To make your custom terrain editable, select the LE_GUILevelEditor instance of your editor scene and assign your custom terrain to the CUSTOM_DEFAULT_TERRAIN property in the inspector view. Doing so will skip the terrain creation phase in the terrain editor.
+</body>
+</html>

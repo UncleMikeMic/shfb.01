@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="events">
+<h1 class="page-title">Event Interface</h1>
+<p><strong><big>Summary</big></strong></p>
+The event interface ('<em>LE_EventInterface</em>' class) of the Multiplatform Runtime Level Editor allows you to implement the required behaviour for your game. Here you define how your data is stored and loaded, which meta data your levels need. The event based interface minimizes the amount of classes that you need to access this way the editor's code is hidden from the code of your game. This approach allows changes in the editor code, without the need for change in your code. In other words the changes that you will need to make in your code after importing an updated version of the level editor are minimal as long as you use the event interface. I will give my best to keep the '<em>LE_EventInterface</em>' class as static as possible. Below you will find all public members and methods of the '<em>LE_EventInterface</em>' class explained briefly. For each member or method I will point you to "how to"-articles showing exemplary use cases.
+<br /><br />
+If you want to make UI related changes, for example changing the <a href="add-left-menu.html">left menu</a> or the <a href="add-button-level-tab.html">level tab</a> buttons, then you should take a look at <a href="custom-ui.html">this article</a>.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnSave</big></strong></p>
+This event will be raised in the level editor when the user clicks on the save button. Using this event will allow you to get a serialized version of your level saved in two byte arrays. See <a href="save.html">this article</a> for more details.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnLoad</big></strong></p>
+The Multiplatform Runtime Level Editor provides different mechanics for you to load a level from one or two byte arrays. See <a href="load.html">this article</a> for more details. This event will be raised in the level editor when the user clicks on the load button.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnLoadedLevelInEditor</big></strong></p>
+This event will be raised when all loading is done for a level that is loaded for editing via the LE_LoadEvent callbacks.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnCollectMetaDataBeforeSave</big></strong></p>
+This event allows you to add additional meta data to your levels. For example the gold medal score could be stored in each level. See <a href="add-meta-data.html">this article</a> for more details.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnChangeLevelData</big></strong></p>
+This event will be raised after (or during) any change to the currently edited level. For example it will be raised when the terrain or an object is modified. It will also be raised when the level icon is rendered.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnObjectSelectedInScene</big></strong></p>
+This event will be raised when an object is selected in the scene by being clicked/touched or through duplicating an object.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnObjectPlaced</big></strong></p>
+This event will be raised when an object is placed through drag and drop or after duplicating an object. See <a href="count-level-objects.html">this article</a> for more details.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnObjectDragged</big></strong></p>
+This event will be raised when an object is about to be placed through drag and drop. This event is called in every frame in which an object is dragged over something by the player. You can use this event to allow or disallow object placement of a specific level object on a certain location. See <a href="level-object-placement-limitation.html">this article</a> for more details.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.OnTerrainCreated</big></strong></p>
+This event is fired when the terrain was created with the "Create Terrain" button in the level editor. You can get the terrain GameObject from the event arguments.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.LevelDataChanged</big></strong><span class="my_eye_catch_text"> removed in v1.30</span></p>
+This method is called by the internal components of the level editor that make changes to the level. If you add additional GUI that will allow players to make changes to the level then you should call this function after every change.<br />
+<span class="my_eye_catch_text">In version v1.30 I have added the LE_LevelDataChangedEvent class, which is now used for the LE_EventInterface.OnChangeLevelData event. If you have used this method, then refactor your code and invoke LE_EventInterface.OnChangeLevelData directly. Also, you need to pass the type of your change inside the LE_LevelDataChangedEvent argument object.</span>
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_EventInterface.UnregisterAll</big></strong></p>
+Call this method to remove all references to event handlers that have been set. You should unregister your event handlers one by one or call this function otherwise memory leaks are possible.
+<br /><br /><br /><br />
+</body>
+</html>

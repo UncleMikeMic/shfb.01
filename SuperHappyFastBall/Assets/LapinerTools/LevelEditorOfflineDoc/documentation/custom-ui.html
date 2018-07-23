@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="custom-ui">
+<h1 class="page-title">Custom UI</h1>
+<p><strong><big>Summary</big></strong></p>
+
+<p><strong><big>LE_GUIInterface</big></strong></p>
+With the '<em>LE_GUIInterface</em>' it is possible to use any UI framework such as uGUI (new Unity 4.6 GUI), NGUI (a very popular UI framework from Unity Asset Store) or even the old OnGUI (like used by the level editor before v1.20). This interface stands between the level editor logic and the implementing UI. The level editor does not reference any UI components, which allows to use any UI implementation. Take a look at the '<em>LE_GUIInterface_uGUIimpl...</em>' classes. These example classes implement the UI for different scenarios. The '<em>LE_GUIInterface</em>' is structured in three sections:
+<br />
+<b>'<em>LE_GUIInterface.Delegates</em>'</b> this nested class contains methods that need to be implemented by your custom UI system. The level editor logic will call these delegates when they are needed. Therefore, if you do not use a certain feature then you do not need to provide the delegates used by this feature. For example, if you set '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' to 'false', then you can safely ignore all delegates starting with '<em>LE_GUIInterface.Delegates.SetTerrain...</em>' and keep their default value 'null', because they will never be called. However, if you have forgotten to implement one of the delegates, then the level editor will print an explanatory message to the debug log once the delegate is required.
+<br />
+<b>'<em>LE_GUIInterface.EventHandlers</em>'</b> this nested class defines the events that can be processed by the level editor. The level editor will register to these event handlers and execute the expected behaviour once the UI rases an event. To simplify the event calls for you the '<em>LE_GUIInterface</em>' class contains wrapper methods at the bottom of this file. Calling the wrapper methods will guarantee that the event handlers are initialized and that the passed event arguments are right and can be processed by the level editor. If you disable features in the level editor for example by setting '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' to 'false' then it is likely that some events are not assigned and have their default value 'null'.
+<br />
+<b>Callbacks/Event wrappers</b> at the bottom of the '<em>LE_GUIInterface.cs</em>' file you will find callbacks that wrap events from '<em>LE_GUIInterface.EventHandlers</em>'. You can assign these callbacks directly to uGUI (NGUI, etc.) buttons, toggles and so on. You can also call these callbacks from scripts. These wrappers will check if the corresponding events are assigned. If you have disabled some features for example the terrain logic, then some event will be not initialized and stay 'null'.
+<br />
+<br />
+To see all available delegates and events see the <b>LE_GUIInterface Reference</b> section below.
+<br />
+<br />
+<p><strong><big>Example UI Implementation And Structure</big></strong></p>
+To give you a better understanding of the GUI interface the structure of the example UI implementation is explained now. There are three example scenes and three example scripts provided in the Unity Asset Store package. Each example script works only in the corresponding example scene. The main scene '<em>LE_ExampleEditor</em>' uses the '<em>LE_GUIInterface_uGUIimpl</em>' script. This script assigns and implements all available delegates defined in '<em>LE_GUIInterface.Delegates</em>'. This script keeps track of all UI elements in the scene which can be changed through delegate calls.<br />
+Let us go through the implementation of one certain UI element that shows the terrain paint texture selection. It allows to swap the selected paint texture and to add new textures. The '<em>LE_GUIInterface_uGUIimpl</em>' class has a reference ('<em>TERRAIN_PAINT_TEXTURES_PICKER</em>') to this UI object, which is assigned in the inspector. In the '<em>SetupTerrainPaintTexturePickerEvents</em>' function the events and delegates of the paint brush selection are assigned.
+<br />
+The <b>'<em>LE_GUIInterface.Delegates.SetTerrainPaintTextures</em>'</b> delegate is assigned. It will be called by the level editor to inform the example UI that a terrain has been created/loaded with certain textures. This delegate has four parameters: the used texture array (textures on the terrain), the unused texture array (textures that can be added to terrain), the selected paint texture index and a bool indicating if more textures can be added. The UI will show the texture selection with the used textures highlighting the selected texture. If more paint textures can be added to the terrain, then an 'add texture' button will be created.
+<br />
+Now selection clicks on the texture picker need to be processed. When the player selects a texture in the texture picker than the <b>'<em>LE_GUIInterface.OnTerrainPaintTextureChanged</em>'</b> callback is executed and the new selected texture index is passed as parameter. The level editor logic will change the selected brush paint texture.
+<br />
+Also the 'add texture' button needs to be processed. When a texture from the unused textures passed in the '<em>LE_GUIInterface.Delegates.SetTerrainPaintTextures</em>' delegate is selected, then the <b>'<em>LE_GUIInterface.OnTerrainPaintTextureAdded</em>'</b> callback is executed and the selected texture is passed as parameter. The level editor will add the new texture to the terrain.
+<br />
+Finally, the selected paint texture can change, for example if a new texture is added, then it is selected as paint texture. To keep the texture picker updated the data from the <b>'<em>LE_GUIInterface.EventHandlers.OnTerrainPaintTextureChanged</em>'</b> event needs also to be propagated to the texture selection.
+<br />
+<p align="center"><img src="MultiplatformRuntimeLevelEditor_SequenceDiagram_GUIInterface.png" border="0" title="Multiplatform Runtime Level Editor GUI Interface Sequence Diagram"/></p>
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<p><strong><big>LE_GUIInterface Reference</big></strong></p>
+
+
+<p><strong><big>LE_GUIInterface.Delegates.IsCursorOverUI</big></strong></p>
+Return 'true' if the cursor is currently over the UI and 'false' otherwise. If the cursor is over the UI, then the level editor will not allow to edit the terrain or place an object on the current cursor position. You need to implement this function to prevent the editor from editing the terrain while the user is interacting with the UI. This delegate is called every frame.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.GetCameraPerspectiveGizmoRightPixelOffset</big></strong></p>
+Return a float pixel offset that will be applied to the camera perspective gizmo. The gizmo will be moved by the given offset in the left direction. This way you can place the gizmo in the right top corner or before the UI on the right side or you can place it in the left top corner. The Camera Perspective Gizmo is a standalone Unity tool available in the <a href="https://www.assetstore.unity3d.com/#!/content/31161">Unity Asset Store</a>. You can find more information about the <a href="http://www.freebord-game.com/index.php/camera-perspective-gizmo">Camera Perspective Gizmo on its homepage</a>. This delegate is called in the first update loop. This delegate is not called if '<em>LE_LevelEditorMain.IS_WITH_CAMERA_PERSPECTIVE_GIZMO</em>' is set to 'false'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.GetObliqueCameraPerspectiveRightPixelOffset</big></strong></p>
+To keep a focused object in the center of the visible screen, the level editor allows to use an oblique camera projection. For example, without the oblique projection an object will be in the middle of the screen after focusing on it (e.g. F-key). However, especially on low resolution devices the right menu could use almost half of the screen. In this case the center of the screen is very close to the right menu. In the worst case only the left half of a big object will be visible. Return a float pixel offset that defines the width of the right menu. With the oblique projection the camera will render as if its view rect had an offset to the right. However, also the screen behind the right menu will be rendered. This delegate will be called in the first update loop and after every camera perspective switch (perspective or orthographic). This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBLIQUE_FOCUS_CENTERING</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetLevelIcon</big></strong></p>
+This delegate has a '<em>Texture2D</em>' parameter representing the level icon that you might want to visualize. This delegate will be called if a level with an icon in the metadata is loaded or the '<em>LE_GUIInterface.OnLevelRenderIconBtn</em>' callback is executed by your UI. The passed parameter is null if a level without an icon is loaded.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainWidth</big></strong></p>
+This delegate passes the terrain width as an int parameter. You might want to visualize it if you have a terrain creation or size editing UI. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainLength</big></strong></p>
+This delegate passes the terrain length as an int parameter. You might want to visualize it if you have a terrain creation or size editing UI. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainHeight</big></strong></p>
+This delegate passes the terrain height as an int parameter. You might want to visualize it if you have a terrain creation or size editing UI. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainBaseTextures</big></strong></p>
+This delegate will be used to set up the terrain base texture selection UI. It has a texture array parameter, which is always set to match the textures from the terrain texture config asset assigned to '<em>LE_ConfigTerrain.TerrainTextureConfig</em>'. Additionally, it also has an int parameter, which identifies the initially selected texture index. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' and '<em>LE_ConfigTerrain.IsBaseTextureSelection</em>' are set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainBrushes</big></strong></p>
+This delegate will be used to set up the terrain brush selection UI. It has a texture array parameter, which is always set to match the textures from the brush array assigned to '<em>LE_ConfigTerrain.Brushes</em>'. Additionally, it also has an int parameter, which identifies the currently selected brush index. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainPaintTextures</big></strong></p>
+This delegate will be used to set up the terrain paint texture selection UI. It has four parameters: the used texture array (textures on the terrain), the unused texture array (textures that can be added to terrain), the selected paint texture index and a bool indicating if more textures can be added. If further texture can be added, then you need to display an add button. If the add button is clicked, then the unused textures must be presented to the player, so that he can choose among them. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainEditBrushSize</big></strong></p>
+This delegate will pass the currently used terrain brush size as a float value in range [0,1]. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainEditBrushAmount</big></strong></p>
+This delegate will pass the currently used terrain brush amount as a float value in range [0,1]. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainEditBrushTargetValue</big></strong></p>
+This delegate will pass the currently used terrain brush target value as a float in range [0,1]. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. Additionally, this delegate will be called multiple times after your UI has executed the '<em>LE_GUIInterface.OnTerrainReadPaintHeightBtn</em>' callback. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainIsReadingPaintHeight</big></strong></p>
+This delegate has a bool parameter that indicates if the level editor is currently reading the terrain paint height. Use it to visualize to the user that the height is read. This delegate will be called immediately after a '<em>LE_GUIInterface.OnTerrainReadPaintHeightBtn</em>' callback call (with 'true' as parameter). It will be called again once the terrain height reading stops (with 'false' as parameter). This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetTerrainUIMode</big></strong></p>
+This delegate has an enum parameter which can have one of two values: '<em>ETerrainUIMode.CREATE</em>' or '<em>ETerrainUIMode.EDIT</em>'. In the create mode the level has no terrain and the player should be able to select the terrain properties such as size and base texture. In the edit mode the level has already a terrain that can be edited, but no more terrains should be created. This delegate will be called in the first update loop and every time a level is loaded or a terrain is created/modified. This delegate will be called only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetObjects</big></strong></p>
+This delegate will be used to set up the object selection UI. It has a '<em>LE_ObjectMap</em>' parameter, which is always set to match the assigned '<em>LE_LevelEditorMain.ROOT_OBJECT_MAP</em>'. This delegate will be called in the first update loop. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.IsObjectDragged</big></strong></p>
+The UI has to handle 2D object drag & drop mechanics (image only, 3D UI will be handled by the level editor), because the level editor does not know which UI is used and therefore cannot implement it. This delegate must return 'true' if an object is currently dragged and 'false' otherwise. This delegate will be called multiple times per frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetDraggableObjectMessage</big></strong></p>
+The UI has to handle 2D object drag & drop mechanics (image only, 3D UI will be handled by the level editor), because the level editor does not know which UI is used and therefore cannot implement it. This delegate has a string parameter, which contains a message explaining why the selected object cannot be placed in the level. For example, an object cannot be placed if the maximal count is reached. This delegate will be called multiple times per frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetDraggableObjectState</big></strong></p>
+The UI has to handle 2D object drag & drop mechanics (image only, 3D UI will be handled by the level editor), because the level editor does not know which UI is used and therefore cannot implement it. This delegate has an enum parameter that can have one of three values: '<em>EDraggedObjectState.NONE</em>', '<em>EDraggedObjectState.IN_3D_PREVIEW</em>' or '<em>EDraggedObjectState.NOT_PLACEABLE</em>'. In the none state nothing needs to be done. In the in 3D preview state the sprite or any preview texture should be hidden, because the level editor already renders a 3D preview of the drag&dropped object. In the not placeable state the UI should make clear that the object cannot be placed, for example by tinting its texture red. This delegate will be called every frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetIsSelectedObjectFocusBtnInteractable</big></strong></p>
+This delegate has a bool parameter which indicates if the focus button is interactable. For example, if no object is selected, then the focus button should be greyed out to prevent user irritation. This delegate will be called every frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetIsSelectedObjectDuplicateBtnInteractable</big></strong></p>
+This delegate has a bool parameter which indicates if the clone/duplicate button is interactable. For example, if no object is selected, then the duplicate button should be greyed out to prevent user irritation. This delegate will be called every frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetIsSelectedObjectDeleteBtnInteractable</big></strong></p>
+This delegate has a bool parameter which indicates if the delete button is interactable. For example, if no object is selected, then the delete button should be greyed out to prevent user irritation. This delegate will be called every frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetIsSelectedPrefabFindBtnInteractable</big></strong></p>
+This delegate has a bool parameter which indicates if the find button is interactable. For example, if no prefab is selected, then the find button should be greyed out to prevent user irritation. This delegate will be called every frame. This delegate will be called only if 'LE_LevelEditorMain.IS_OBJECT_EDITOR' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetIsSelectedObjectSleepPropertyInteractable</big></strong></p>
+This delegate has a bool parameter which indicates if the '<em>Rigidbody</em>' sleep property menu is interactable. For example, if no object is selected or the selected object has no rigidbody, then the sleep property menu should be hidden. This delegate will be called every frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetSelectedObjectIsSleepOnStartPropertyValue</big></strong></p>
+This delegate passes the current value of the 'IsSleepOnStartProperty' of the selected object. This delegate will be called in every frame with a selected object having an editable 'IsSleepOnStartProperty'. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetIsSelectedObjectColorPropertyInteractable</big></strong></p>
+This delegate has a bool parameter which indicates if the '<em>Material</em>' color property menu is interactable. For example, if no object is selected or the selected object does not support coloring, then the color property menu should be hidden. This delegate will be called every frame. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetSelectedObjectColorPropertyValue</big></strong></p>
+This delegate passes the current value of the 'ObjectColorProperty' of the selected object. This delegate will be called in every frame with a selected object having an editable 'ObjectColorProperty'. This delegate will be called only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.SetSelectedObjectVariationPropertyValue</big></strong></p>
+This delegate passes the index of the used variation and the names of all available variations. If nothing is selected, then null is passed instead of the variations array. This delegate will be called in every frame with a selected object having multiple variations. This delegate will be called only if 'LE_LevelEditorMain.IS_OBJECT_EDITOR' is set to 'true'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.ShowPopupConfirmDeleteObject</big></strong></p>
+Show a popup which asks the player to confirm that he wants to delete the selected object. Invoke the passed callback with 'true' if the users answer is 'yes - delete object' and pass 'false' if the answer is 'no - do nothing'. This delegate is called immediately after your UI calls <em>LE_GUIInterface.OnSelectedObjectDeleteBtn</em>'.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface.Delegates.ShowWP8RenderLevelIconBugDialog</big></strong></p>
+If for some reason you cannot use the latest Unity version and you have to run Unity 4.6.0 you will encounter a bug with level icon rendering. For more information search "This is another bug with Unity for Windows Phone 8" in the LE_LogicLevel.cs file. An example text that you might want to show: "A bug might have occurred! If the rendered level icon looks buggy, <b>please bring your device in landscape left orientation (turn it around for 180 degrees, while still facing the screen) and render level icon again.</b>"
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnEditModeBtn</big></strong></p>
+The wrapper of this event takes an int parameter, which is converted to the '<em>LE_EEditMode (TERRAIN, OBJECT, NONE)</em>' enum. This event changes the edit mode of the level editor. You should not call this wrapper with the edit mode 0 ('<em>TERRAIN</em>') if you have set the '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' to 'false'. The same applies to the ('<em>OBJECT</em>') mode. In the example scene this wrapper is assigned to the tab buttons at top right.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnUndoBtn</big></strong></p>
+This parameterless event wrapper will undo the last action, if there are actions that can be undone. In the example scene this wrapper is assigned to the 'LeftNav_UndoBtn' button.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnRedoBtn</big></strong></p>
+This parameterless event wrapper will redo the last action, if there are actions that were undone. In the example scene this wrapper is assigned to the 'LeftNav_RedoBtn' button.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainWidthChanged</big></strong></p>
+The wrapper of this event takes a string parameter, which is later converted to an int. If there was no terrain created/loaded, then the width of the terrain that will be created later by the level editor is changed. If there is an editable terrain created, then its width will change on the fly (this behaviour is not shown in the example, but you can see it by enabling the create terrain UI with an existing terrain). This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the width input text field of the create terrain menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainLengthChanged</big></strong></p>
+The wrapper of this event takes a string parameter, which is later converted to an int. If there was no terrain created/loaded, then the length of the terrain that will be created later by the level editor is changed. If there is an editable terrain created, then its length will change on the fly (this behaviour is not shown in the example, but you can see it by enabling the create terrain UI with an existing terrain). This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the length input text field of the create terrain menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainHeightChanged</big></strong></p>
+The wrapper of this event takes a string parameter, which is later converted to an int. If there was no terrain created/loaded, then the height of the terrain that will be created later by the level editor is changed. If there is an editable terrain created, then its height will change on the fly (this behaviour is not shown in the example, but you can see it by enabling the create terrain UI with an existing terrain). This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the height input text field of the create terrain menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainBaseTextureChanged</big></strong></p>
+The wrapper of this event takes an int parameter. The passed parameter is used as a texture index in the texture array from the terrain texture config assigned to '<em>LE_ConfigTerrain.TerrainTextureConfig</em>'. This index stands for the first (base) texture of the later created terrain. Call this wrapper only if there was no terrain created or loaded. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene the '<em>LE_GUIInterface_uGUIimpl</em>' script assigns this wrapper to the texture picker in the create terrain menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainBrushChanged</big></strong></p>
+The wrapper of this event takes an int parameter. The passed parameter is used as a texture index in the brush texture array assigned to '<em>LE_ConfigTerrain.Brushes</em>'. The used brush will be changed in the terrain editor logic. Also, the brush projector texture will be changed. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene the '<em>LE_GUIInterface_uGUIimpl</em>' script assigns this wrapper to the brush texture picker in the terrain edit menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainPaintTextureChanged</big></strong></p>
+The wrapper of this event takes an int parameter. The passed parameter is used as a texture index in the texture array of the edited terrain. The selected texture (splat prototype) will be applied to the terrain editor logic. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene the '<em>LE_GUIInterface_uGUIimpl</em>' script assigns this wrapper to the paint texture picker in the terrain edit menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainPaintTextureAdded</big></strong></p>
+The wrapper of this event takes a '<em>Texture2D</em>' parameter. The passed texture must be contained in the terrain texture config assigned to '<em>LE_ConfigTerrain.TerrainTextureConfig</em>'. The given texture will be added to the used terrain textures. This texture will also be selected for painting. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene the '<em>LE_GUIInterface_uGUIimpl</em>' script calls this wrapper when the 'add new' button in the paint texture picker in the terrain edit menu is clicked.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainEditBrushSizeChanged</big></strong></p>
+The wrapper of this event takes a float parameter, which must be in range [0,1]. The brush size is calculated from the passed value like this: '<em>max(0.002, value&sup2;)</em>'. The brush has the size of the terrain if the size value is 1. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Size' slider of the terrain edit menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainEditBrushAmountChanged</big></strong></p>
+The wrapper of this event takes a float parameter, which must be in range [0,1]. The amount is calculated from the passed value like this: '<em>max(0.002, value)</em>'. If you need to set a negative amount, for example to lower the terrain combine this event with '<em>OnTerrainChangeHeightModeChanged</em>'. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Amount' slider of the terrain edit menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainEditBrushTargetValueChanged</big></strong></p>
+The wrapper of this event takes a float parameter, which must be in range [0,1]. The target value is set in the terrain editor logic. A value of 0 means that the terrain will be lowered to the bottom. A value of 0.5 will raise the terrain to the half of the terrain's height and a value of one will raise the terrain to the maximal height. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Target Value' slider of the terrain edit menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainEditDirectionChanged</big></strong></p>
+The wrapper of this event takes a float parameter, which must be in range [0,1]. The smooth direction angle is calculated like this: '<em>round(value*16)*22.5</em>'. This way only 16 directions are available. This is required due to the smoothing function implementation. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Is Directed' toggle of the terrain smooth menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainChangeHeightModeChanged</big></strong></p>
+The wrapper of this event takes a bool parameter, which indicates if the terrain is raised ('true') or lowered ('false'). This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Raise' and 'Lower' toggle buttons of the raise/lower height terrain edit menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainIsDirectedSmoothChanged</big></strong></p>
+The wrapper of this event takes a bool parameter, which indicates if the terrain smoothing is directed. Use in combination with '<em>OnTerrainEditDirectionChanged</em>' to set the smooth direction. If the smooth function is directed, then only the neightbours in the smooth direction are used to calculate the smoothed height for a certain point. This allows to smooth a mountain crest without lowering it or to smooth a riverbed without raising it. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Is Directed' toggle of the smooth terrain edit mode menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainCreateBtn</big></strong></p>
+This parameterless event wrapper will create a terrain if no terrain was created or loaded. Use in combination with '<em>OnTerrainWidthChanged, OnTerrainLengthChanged, OnTerrainHeightChanged, OnTerrainBaseTextureChanged</em>' to setup the terrain values. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Create Terrain' button.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainEditModeBtn</big></strong></p>
+The wrapper of this event takes an int parameter, which is converted to the '<em>LE_ETerrainEditMode (CHANGE_HEIGHT, CHANGE_HEIGHT_TO_TARGET_VALUE, SMOOTH_HEIGHT, DRAW_TEXTURE)</em>' enum. This event changes the terrain edit mode of the terrain editor. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the terrain edit mode buttons below the tab buttons at top right.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnTerrainReadPaintHeightBtn</big></strong></p>
+This parameterless event wrapper will bring the terrain editor in the read terrain paint height mode. The editor will read the terrain height at the point where the next mouse click/touch will be. Use in combination with '<em>SetTerrainIsReadingPaintHeight</em>' delegate to visualize the reading process. Use in combination with '<em>SetTerrainEditBrushTargetValue</em>' delegate to visualize the new read height. This event is available only if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Read Terrain Paint Height' button.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnObjectEditModeBtn</big></strong></p>
+The wrapper of this event takes an int parameter, which is converted to the '<em>LE_EObjectEditMode (NO_EDIT, MOVE, ROTATE, SCALE)</em>' enum. This event changes the object edit mode of the object editor. This event is available only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the object edit mode buttons below the tab buttons at top right.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnObjectSelectDraggable</big></strong></p>
+The wrapper of this event takes two parameters: a '<em>LE_Object</em>' and a string. The passed '<em>LE_Object</em>' is the resource reference to the object prefab and the string parameter is the resource path to the prefab. The draggable object will be set in the object editor. Use in combination with '<em>IsObjectDragged, SetDraggableObjectMessage, SetDraggableObjectState</em>' delegates to implement drag&drop. This event is available only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the leaf nodes of the object tree browser.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnSelectedObjectFocusBtn</big></strong></p>
+This parameterless event wrapper will focus the camera on the selected object. Call this wrapper only if an object is selected. Use in combination with '<em>SetIsSelectedObjectFocusBtnInteractable</em>' to disable UI if no object is selected. This event is available only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Focus' button in the objects menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnSelectedObjectDuplicateBtn</big></strong></p>
+This parameterless event wrapper will duplicate/clone the selected object. Call this wrapper only if an object is selected and can be duplicated. Use in combination with '<em>SetIsSelectedObjectDuplicateBtnInteractable</em>' to disable UI if no object is selected or it cannot be duplicated. This event is available only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Duplicate' button in the objects menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnSelectedObjectDeleteBtn</big></strong></p>
+This parameterless event wrapper will delete the selected object. Call this wrapper only if an object is selected. Use in combination with '<em>SetIsSelectedObjectDeleteBtnInteractable</em>' to disable UI if no object is selected. This event is available only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Delete' button in the objects menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnSelectedObjectIsSleepOnStartChanged</big></strong></p>
+The wrapper of this event takes a bool parameter, which indicates if the rigidbody should be sent to sleep on level load. Call this wrapper only if an object with a rigidbody is selected and the sleep setting for this object can be changed. Use in combination with '<em>SetIsSelectedObjectSleepPropertyInteractable</em>' delegate to disable UI if no object is selected or its sleep setting is not available. Use in combination with '<em>SetSelectedObjectIsSleepOnStartPropertyValue</em>' delegate to keep your UI updated. This event is available only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'. In the example scene this wrapper is assigned to the 'Sleep On Start' toggle in the object property menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnSelectedObjectColorChanged</big></strong></p>
+The wrapper of this event takes a '<em>Color</em>' parameter, which is applied to the materials of the level object. Call this wrapper only if an object is selected and the color setting for this object can be changed. Use in combination with '<em>SetIsSelectedObjectColorPropertyInteractable</em>' delegate to disable UI if no object is selected or its color setting is not available. Use in combination with '<em>SetSelectedObjectColorPropertyValue</em>' delegate to keep your UI updated. This event is available only if '<em>LE_LevelEditorMain.IS_OBJECT_EDITOR</em>' is set to 'true'. In the example scene the '<em>LE_GUIInterface_uGUIimpl</em>' script assigns this wrapper to the color picker in the object property menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnSelectedObjectVariationIndexChanged</big></strong></p>
+The wrapper of this event takes an int parameter as index for the variation, which is applied to the object. Call this wrapper only if an object is selected and there are multiple variations available. Use in combination with 'SetIsSelectedObjectColorPropertyInteractable' delegate to disable UI if no object is selected or its color setting is not available. Use in combination with 'SetSelectedObjectVariationPropertyValue' delegate to keep your UI updated. This event is available only if 'LE_LevelEditorMain.IS_OBJECT_EDITOR' is set to 'true'. In the example scene the 'LE_GUIInterface_uGUIimpl' script assigns this wrapper to the variation browser in the object property menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnSelectedPrefabFindBtn</big></strong></p>
+This parameterless event wrapper will search the selected prefab in the scene. If an object instance of this prefab is found, then the editor will select this instance and focus on it. If there are multiple instances of this object and one istance is already selected, then the editor will focus on the next instance. Call this wrapper only if a prefab is selected. Use in combination with 'SetIsSelectedPrefabFindBtnInteractable' to disable UI if no prefab is selected. This event is available only if 'LE_LevelEditorMain.IS_OBJECT_EDITOR' is set to 'true'. In the example scene this wrapper is assigned to the 'Find' button in the objects menu.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnLevelSaveBtn</big></strong></p>
+This parameterless event wrapper will save the level. Use in combination with '<em>LE_EventInterface.OnSave</em>' to get the serialized level data. In the example scene this wrapper is assigned to the 'Save' button.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnLevelLoadBtn</big></strong></p>
+This parameterless event wrapper will load the level. Use in combination with '<em>LE_EventInterface.OnLoad</em>' to provide the serialized level data. In the example scene this wrapper is assigned to the 'Load' button.
+<br /><br /><br /><br />
+
+
+<p><strong><big>LE_GUIInterface<span class="my_greyout_text">(.EventHandlers)</span>.OnLevelRenderIconBtn</big></strong></p>
+This parameterless event wrapper will render the level icon by capturing the screen. Use in combination with '<em>SetLevelIcon</em>' delegate to visualize the level icon. In the example scene this wrapper is assigned to the 'Render Level Icon' button.
+<br /><br /><br /><br />
+</body>
+</html>

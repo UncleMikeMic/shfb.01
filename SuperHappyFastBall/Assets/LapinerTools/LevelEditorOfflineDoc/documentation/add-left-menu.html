@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="add-left-menu">
+<h1 class="page-title">Add Left Menu/Manage Left Menu Buttons</h1>
+Since version v1.20 the level editor is completely independent of the UI implementation. You do not need to use any rigid UI extension system. Simply add the needed UI to the scene. To extend the menu of the built-in example UI duplicate the 'Back To Editor' button (search for 'BackToEditorBtn'), rearrange it, update its text and add your script callback to its 'OnClick()' function. Remove the '<em>uMyGUI_PopupText.OnButtonClick</em>' callback from the 'OnClick()' function to keep the menu open when your button is clicked. Keep the '<em>uMyGUI_PopupText.OnButtonClick</em>' callback to let the menu close after click. If you want to use a custom UI, then you can find more information in <a href="custom-ui.html">this article</a>.<br />
+
+</body>
+</html>

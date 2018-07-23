@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1fb2580c6592d824cb927cdf175e24a4
+labels:
+- Selection
+- Picker
+- Save/Load
+- Load
+- Save
+- Serialization
+- Serialisation
+- Level
+- File
+TextScriptImporter:
+  userData: 

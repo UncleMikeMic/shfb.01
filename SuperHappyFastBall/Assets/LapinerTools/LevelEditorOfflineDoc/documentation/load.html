@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="load">
+<h1 class="page-title">Load Level</h1>
+<p><strong><big>Summary</big></strong></p>
+There are three possible use cases for loading a level. A level can be loaded in the editor when the user clicks on the load button (<b>Editor Button</b> use case). However, in some cases you might want to load a level in the editor without user interaction. For example when the user has started a level from the editor and now comes back to the level editor scene. The user will want to see the level that he has started, because he might want to change something after his play test session (<b>Editor No Button</b> use case). In these first two use cases the level is loaded for editing, but you might also want to open the level for playing in your game (<b>Game</b> use case).<br /><br />
+
+<b>Editor Button</b>: to load the game in the editor you have to register for the '<em>LE_EventInterface.OnLoad</em>' event, which is triggered when the load button is clicked in the level editor.<br /><br />
+
+<b>Editor No Button</b>: in this case you will have to call the '<em>LE_LevelEditorMain.GetLoadEvent</em>' method in order to get the same EventArgs like you would receive in the '<em>LE_EventInterface.OnLoad</em>' event.<br /><br />
+
+<b>Game</b>: loading a level in the game is even simpler. You have to call the '<em>LE_SaveLoad.LoadLevelDataFromByteArray</em>' method to load the level. If you have to load the level meta data (e.g. to get the gold medal score of the current level) then you should take a look at Step 3 of this <a href="add-meta-data.html">article</a>.<br /><br />
+
+<p><strong><big>Editor Button</big></strong></p>
+Register for the '<em>LE_EventInterface.OnLoad</em>' event. This event will be called when the level is loaded. Keep in mind that you also should unregister the event handler when your script gets destroyed otherwise a memory leak could occur.
+<code>
+using LE_LevelEditor.Events;
+</code>
+<code>
+<p class="my_code_comment">// Register for the load event, which is called when the level is loaded</p>
+LE_EventInterface.OnLoad += OnLoad;
+</code>
+The event handler below will execute the callback of the '<em>LE_LoadEvent</em>' EventArgs to provide the editor with the byte arrays of the level that has to be loaded.
+<code>
+private void OnLoad(object p_sender, LE_LoadEvent p_args)<br />
+{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// You will probably load your level's data and meta data from a file here</p>
+&nbsp;&nbsp;&nbsp;
+	byte[] dataAsByteArray = ...;<br />
+&nbsp;&nbsp;&nbsp;
+	byte[] metaAsByteArray = ...;<br /><br />
+
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// Execute the callbacks of the EventArgs in order to load the level into the editor</p>
+&nbsp;&nbsp;&nbsp;
+	p_args.LoadLevelDataFromBytesCallback(dataAsByteArray);<br />
+&nbsp;&nbsp;&nbsp;
+	p_args.LoadLevelMetaFromBytesCallback(metaAsByteArray);<br /><br />
+
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// You could make some default operations on the level, since it is fully loaded now<br />
+&nbsp;&nbsp;&nbsp;
+	// For example you could make the camera always look at the player</p>
+}
+</code>
+
+<p><strong><big>Editor No Button</big></strong></p>
+To load a level into the level editor you have to call the '<em>LE_LevelEditorMain.GetLoadEvent</em>' of the current instance.
+<code>
+using LE_LevelEditor;
+</code>
+<code>
+<p class="my_code_comment">// You will probably load your level's data and meta data from a file here</p>
+byte[] dataAsByteArray = ...;<br />
+byte[] metaAsByteArray = ...;<br /><br />
+
+<p class="my_code_comment">// Search for an instance of the LE_LevelEditorMain.</p>
+LE_LevelEditorMain lvlEditor = FindObjectOfType&#60;LE_LevelEditorMain&#62;();<br />
+<p class="my_code_comment">// You can either check with 'lvlEditor.IsReady' if the level editor is initialized (currently after the first update loop)<br />
+// or simply add a callback like below.</p>
+lvlEditor.ExecuteWhenReady(()=><br />
+{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// Now that we know that the editor is initialized a load event can be acquired from it.<br />
+&nbsp;&nbsp;&nbsp;
+	// Execute the callbacks of the acquired event in order to load the level into the editor</p>
+&nbsp;&nbsp;&nbsp;
+	lvlEditor.GetLoadEvent().LoadLevelDataFromBytesCallback(dataAsByteArray);<br />
+&nbsp;&nbsp;&nbsp;
+	lvlEditor.GetLoadEvent().LoadLevelMetaFromBytesCallback(metaAsByteArray);<br />
+	<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// You could make some default operations on the level, since it is fully loaded now<br />
+&nbsp;&nbsp;&nbsp;
+	// For example you could make the camera always look at the player</p>
+});<br />
+</code>
+
+<p><strong><big>Game</big></strong></p>
+The code below will load a level for playing using the '<em>LE_SaveLoad.LoadLevelDataFromByteArray</em>' method. It will pass the data byte array of the level and some values defined in the terrain texture config, which is provided through the Unity editor inspector. Finally, '<em>LE_SaveLoad.DisableLevelEditing</em>' is called. This function will destroy all instances of the '<em>LE_Object</em>' script to ensure that the level cannot be edited.<br /><br />
+
+The terrain texture config instance is required in order to load the terrain correctly. The level files do not contain any assets and therfore also no terrain textures. The level file only stores an id of the texture as it is defined in the texture config. Hence, the same texture config needs to be used for level loading and level saving.<br /><br />
+
+In this example only the level data byte array is loaded. The meta data byte array is not loaded, since in the default case it contains only meta data for example the level icon, which is not required to play the level. However, if you have added some meta data that is required to play the game you will also have to load and process it (see Step 3 of <a href="add-meta-data.html">Add Additional Meta Data</a>).
+<code>
+using LE_LevelEditor.Core;
+</code>
+<code>
+<p class="my_code_comment">// This serialized field should be defined in the top of this class. Its value should be<br />
+// assigned through the Unity editor's inspector.</p>
+[SerializeField]<br />
+private LE_TerrainTextureConfig TERRAIN_TEXTURE_CONFIG = null;
+</code>
+<code>
+<p class="my_code_comment">// You will probably load your level's data from a file here</p>
+byte[] dataAsByteArray = ...;<br /><br />
+
+<p class="my_code_comment">// Load the level from the byte array. Since there are no editor scripts in this scene the terrain<br />
+// texture configuration is not defined and needs to be passed to the LoadLevelDataFromByteArray method.<br />
+// In this example we expect TERRAIN_TEXTURE_CONFIG to be a serialized property of this class.</p>
+LE_SaveLoadData level = LE_SaveLoad.LoadLevelDataFromByteArray(<br />
+&nbsp;&nbsp;&nbsp;
+	dataAsByteArray,<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// pass '0' to put the terrain in the 'Default' layer. Something like <em>LayerMask.NameToLayer("Terrain")</em> is also possible</p>
+&nbsp;&nbsp;&nbsp;
+	0,<br />
+&nbsp;&nbsp;&nbsp;
+	TERRAIN_TEXTURE_CONFIG.TERRAIN_TEXTURES,<br />
+&nbsp;&nbsp;&nbsp;
+	TERRAIN_TEXTURE_CONFIG.TERRAIN_TEXTURE_SIZES,<br />
+&nbsp;&nbsp;&nbsp;
+	TERRAIN_TEXTURE_CONFIG.TERRAIN_TEXTURE_OFFSETS);<br /><br />
+
+<p class="my_code_comment">// call this function to destroy level editing scripts and improve performance</p>
+LE_SaveLoad.DisableLevelEditing(level);<br />
+<br /><br />
+
+<p class="my_code_comment">// You could make some default operations on the level, since it is fully loaded now<br />
+// For example you could move the player to the start position and make the camera look at him</p>
+</code>
+</body>
+</html>

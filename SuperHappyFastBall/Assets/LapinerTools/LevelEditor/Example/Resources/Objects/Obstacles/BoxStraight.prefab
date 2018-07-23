@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400018}
+  - 33: {fileID: 3300000}
+  - 23: {fileID: 2300000}
+  - 114: {fileID: 11400002}
+  - 64: {fileID: 6400000}
+  m_Layer: 0
+  m_Name: BoxStraight
+  m_TagString: Locker
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400018
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!23 &2300000
+Renderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: a14bde1bdd7550c4688508294d3f0b50, type: 2}
+  - {fileID: 2100000, guid: d6a6e415c79badf4cb7176615dffa520, type: 2}
+  - {fileID: 2100000, guid: 98135ce4193b5f242b29ce34c0943ec5, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &3300000
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_Mesh: {fileID: 4300000, guid: 745a6b970024c9e458c285223a1c385a, type: 3}
+--- !u!64 &6400000
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_Material: {fileID: 13400000, guid: 022f9d5cee3839f468406b1a358f33e9, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_SmoothSphereCollisions: 0
+  m_Convex: 0
+  m_Mesh: {fileID: 4300000, guid: 745a6b970024c9e458c285223a1c385a, type: 3}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c8e9cdcf428c1448e2b69c04d0af97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_iconPath: ObjectIcons/Obstacles/BoxStraight
+  m_isPlacementRotationByNormal: 1
+  m_isMovable: 1
+  m_isMovableOnX: 1
+  m_isMovableOnY: 1
+  m_isMovableOnZ: 1
+  m_isRotatable: 1
+  m_isRotatableAroundX: 1
+  m_isRotatableAroundY: 1
+  m_isRotatableAroundZ: 1
+  m_rotationRndEulerX: -1
+  m_rotationRndEulerY: -1
+  m_rotationRndEulerZ: -1
+  m_isScaleable: 1
+  m_isScaleableOnX: 1
+  m_isScaleableOnY: 1
+  m_isScaleableOnZ: 1
+  m_isUniformScale: 0
+  m_uniformScaleRnd: -1
+  m_isRigidbodySleepingStart: 1
+  m_isRigidbodySleepingStartEditable: 1
+  m_maxInstancesInLevel: 0
+  m_isWithColorProperty: 0
+  m_snapType: 0
+  m_rootSnapPointIndex: -1
+  m_objectSnapPoints: []
+  m_isDrawSnapToObjectUI: 1
+  m_snapGridOffset: {x: 0, y: 0, z: 0}
+  m_snapGridCellSize: {x: 10, y: 10, z: 10}
+  m_isLevelStreaming: 0
+  m_levelStreamingInstantiateDistance: 100
+  m_levelStreamingDestroyDistance: 100
+  m_levelStreamingInstantiateDistanceInEditor: 200
+  m_levelStreamingDestroyDistanceInEditor: 200
+  m_levelStreamingUpdateFrequency: 15
+  m_isTransformationCachedOnDestroyWhenLevelStreaming: 1
+  m_variationsMaterial:
+  - m_name: Material Set 1
+    m_renderers:
+    - {fileID: 2300000}
+    m_rendererMaterials:
+    - m_materials:
+      - {fileID: 2100000, guid: a14bde1bdd7550c4688508294d3f0b50, type: 2}
+      - {fileID: 2100000, guid: d6a6e415c79badf4cb7176615dffa520, type: 2}
+      - {fileID: 2100000, guid: 98135ce4193b5f242b29ce34c0943ec5, type: 2}
+  - m_name: Material Set 2
+    m_renderers:
+    - {fileID: 2300000}
+    m_rendererMaterials:
+    - m_materials:
+      - {fileID: 2100000, guid: 5f1ab720edcdb414187b7e7a94d23416, type: 2}
+      - {fileID: 2100000, guid: a14bde1bdd7550c4688508294d3f0b50, type: 2}
+      - {fileID: 2100000, guid: 98135ce4193b5f242b29ce34c0943ec5, type: 2}
+  - m_name: Material Set 3
+    m_renderers:
+    - {fileID: 2300000}
+    m_rendererMaterials:
+    - m_materials:
+      - {fileID: 2100000, guid: a14bde1bdd7550c4688508294d3f0b50, type: 2}
+      - {fileID: 2100000, guid: 5f1ab720edcdb414187b7e7a94d23416, type: 2}
+      - {fileID: 2100000, guid: 98135ce4193b5f242b29ce34c0943ec5, type: 2}
+  m_variationsActivateDeactivate: []
+  m_variationsDefaultIndex: 0
+  m_color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 100018}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1

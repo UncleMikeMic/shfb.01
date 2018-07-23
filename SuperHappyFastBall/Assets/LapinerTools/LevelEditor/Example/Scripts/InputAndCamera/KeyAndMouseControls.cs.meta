@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 8c89854d1b65ef34d9765a3aa34621d3
+labels:
+- Objects
+- Terrain
+- Save/Load
+- Load
+- Save
+- Serialization
+- Serialisation
+- Level
+- Editor
+- Runtime
+- Multiplatform
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="documentation/css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="documentation/css/template.css" type="text/css" />
+</head>
+<body class="documentation">
+<h1 class="page-title">Multiplatform Runtime Level Editor Documentation</h1>
+<b><a href="http://www.freebord-game.com/index.php/multiplatform-runtime-level-editor/documentation">FULL ONLINE DOCUMENTATION (it looks better :)</a></b><br />
+<b><a href="http://www.freebord-game.com/index.php/multiplatform-runtime-level-editor">PROJECT HOME PAGE</a></b><br /><br />
+<font color="#FF0000">If you have any questions or you cannot find any help for your problem in this documentation then please write a post in the following unity forum thread:<br /><a href="http://forum.unity3d.com/threads/multiplatform-runtime-level-editor-any-one-interested.250920/">Unity Forum: Multiplatform Runtime Level Editor.</a><br />Please do the same also if you have any feedback or improvement suggestion to this documentation.</font><br /><br />
+<p><strong><big>Introduction</big></strong></p>
+<ul>
+  <a href="documentation/events.html">
+    <li type="disc">
+      <b>Event Interface</b><br />
+      The MR Level Editor has an event based interface that allows to integrate the editor easily in any game.<br />
+      This is the starting point of the documentation, please read this article first.
+    </li>
+  </a>
+  <a href="documentation/config.html">
+    <li type="disc">
+      <b>Configuration</b><br />
+      Once integrated the MR Level Editor has a simple configuration workflow.<br />
+      You can quickly setup all parameters like terrain textures&brushes, objects, gizmos, etc. in the inspector.
+    </li>
+  </a>
+</ul>
+<a name="howto"></a><p><strong><big>Tutorials & How To's</big></strong></p>
+<b>Save & Load / Serialization</b>
+<ul>
+  <a href="documentation/save.html">
+    <li type="disc">
+      <b>Save Level</b><br />
+      Learn how to save your level to a byte array.
+    </li>
+  </a>
+  <a href="documentation/load.html">
+    <li type="disc">
+      <b>Load Level</b><br />
+      Learn how to load your level from a byte array and how to get the level file version, all level objects or the terrain without searching.
+    </li>
+  </a>
+  <a href="documentation/add-meta-data.html">
+    <li type="disc">
+      <b>Add Additional Meta Data</b><br />
+      By default level meta data contains only the level icon. Learn how to add additional meta data to your levels.
+    </li>
+  </a>
+</ul>
+<b>Terrain Editor</b>
+<ul>
+  <a href="documentation/terrain-textures.html">
+    <li type="disc">
+      <b>Add/Remove/Modify/Limit Terrain Textures</b><br />
+      Learn how to add your own terrain textures and remove or modify the existing ones. It is possible to limit the number of textures per level. Also the base texture selection can be disabled.
+    </li>
+  </a>
+  <a href="documentation/terrain-brushes.html">
+    <li type="disc">
+      <b>Add/Remove/Modify Terrain Brushes</b><br />
+      Learn how to add your own terrain brush masks and remove or modify the existing ones.
+    </li>
+  </a>
+  <a href="documentation/custom-terrain.html">
+    <li type="disc">
+      <b>Use A Custom Unity Terrain</b><br />
+      Learn how to use a custom terrain made with Unity and skip the terrain creation UI.
+    </li>
+  </a>
+</ul>
+<b>Object Editor</b>
+<ul>
+  <a href="documentation/level-objects.html">
+    <li type="disc">
+      <b>Create/Add/Remove Level Objects</b><br />
+      Learn how to create and add your own level objects or how to remove the existing ones.
+    </li>
+  </a>
+  <a href="documentation/level-object-placement-limitation.html">
+    <li type="disc">
+      <b>Define/Limit Level Objects Placement Area</b><br />
+      Learn how to define or limit the area where level objects can be placed or built.
+    </li>
+  </a>
+  <a href="documentation/count-level-objects.html">
+    <li type="disc">
+      <b>Perform Actions After Level Object Placement</b><br />
+      Learn how to perform actions after level object placement. For example limit the maximal count of objects or make objects cost ingame money.
+    </li>
+  </a>
+  <a href="documentation/snap-modes.html">
+    <li type="disc">
+      <b>Object Snap Modes</b><br />
+      Learn how to make an object snap to a terrain or to a grid. Additionally, objects can also snap to certain points of other objects.
+    </li>
+  </a>
+  <a href="documentation/streamed-levels.html">
+    <li type="disc">
+      <b>Streamed Levels/Streamed Objects/Late Load Objects</b><br />
+      Learn how to improve performance of big levels by setting level objects to be instantiated only if visible.
+    </li>
+  </a>
+</ul>
+<b>Level Editor Extensions / Additional Buttons</b>
+<ul>
+  <a href="documentation/custom-ui.html">
+    <li type="disc">
+      <b>Use A Custom UI</b><br />
+      An example UI is included. Learn how to replace it with a custom UI created with uGUI, NGUI or even OnGUI. The editor is independent of the UI implementation.
+    </li>
+  </a>
+  <a href="documentation/add-button-level-tab.html">
+    <li type="disc">
+      <b>Add A Button To The Level Tab</b><br />
+      The included example UI has three buttons (save&load&play). Learn how to extend the editor with additional buttons in the level tab.
+    </li>
+  </a>
+  <a href="documentation/add-left-menu.html">
+    <li type="disc">
+      <b>Add Left Menu/Manage Left Menu Buttons</b><br />
+      The included example UI has a menu. Learn how to add additional buttons to it.
+    </li>
+  </a>
+  <a href="documentation/add-help.html">
+    <li type="disc">
+      <b>Add Help Topic</b><br />
+      Learn how to add a help topic to the help popup.
+    </li>
+  </a>  
+  <a href="documentation/hide-editor-tabs.html">
+    <li type="disc">
+      <b>Hide(Remove) Terrain/Object Tabs</b><br />
+      Learn how to hide or remove the terrain or the object tab of the editor.
+    </li>
+  </a>
+</ul>
+<br />
+<br />
+<a name="troubleshooting"></a><p><strong><big>Troubleshooting</big></strong></p>
+<b><font color="#CC0000">ERROR:</font></b><br />
+Error in console when clicking on 'Render Missing Icons' in an object map ("Failed to generate preview for object prefab '[XY]' at index '[Z]'!")<br />
+<b><font color="#00AA00">SOLUTION:</font></b><br />
+Click again<br />
+<br />
+<br />
+<b><font color="#CC0000">ERROR:</font></b><br />
+Level icon preview rendering does not work properly on Windows 8.1 and Windows Phone 8.1 when the resolution is not set to native.<br />
+<b><font color="#00AA00">SOLUTION:</font></b><br />
+This is a Unity bug that is easy to solve.<br />
+1. Open the "LE_GUIWindowRight.LevelTab.cs" file.<br />
+2. Search for "Level Icon Preview Bug"<br />
+3. Follow the instructions in the comments.<br />
+<br />
+<br />
+<b><font color="#CC0000">ERROR:</font></b><br />
+Level icon preview rendering does not work properly in Unity Editor (seen in Unity 5.2.2).<br />
+<b><font color="#00AA00">SOLUTION:</font></b><br />
+This is a Unity bug, that happens only in the editor and not in the build. This bug occurs only if you have (gray) borders in your game view in the Editor. If you need to render your level icons in the editor, then simply set the aspect ration to 'Free Aspect' in the game window. This bug is <a href="http://issuetracker.unity3d.com/issues/readpixels-get-distorted-input-in-game-view-window">reported to be fixed in Unity 5.2.2</a>, therefore if you have problems with it consider using a newer Unity version.<br />
+<br />
+<br />
+<b><font color="#CC0000">ERROR:</font></b><br />
+Code does not compile. With errors like:<br />
+"error CS0246: The type or namespace name `LE_LevelEditorMain' could not be found. Are you missing a using directive or an assembly reference?"<br />
+<b><font color="#00AA00">SOLUTION:</font></b><br />
+To avoid conflicts with your code all level editor classes have their own namespace. Add all namespaces by placing these lines at the top of your code file:
+<code>
+using LE_LevelEditor;<br />
+using LE_LevelEditor.Core;<br />
+using LE_LevelEditor.Events;<br />
+using LE_LevelEditor.Example;<br />
+using LE_LevelEditor.LEInput;<br />
+using LE_LevelEditor.Logic;"<br />
+using LE_LevelEditor.UI;
+</code>
+<br />
+<br />
+<b><font color="#CC0000">ERROR:</font></b><br />
+Unity console shows errors when project/scene is opened. "IsFinite(outDistanceAlongView) UnityEditor.DockArea:OnGUI()"<br />
+<b><font color="#00AA00">SOLUTION:</font></b><br />
+You are facing the Unity Engine bug which sets RectTransform values to NaN.<br />
+<a href="http://forum.unity3d.com/threads/vertical-scroll-bar-handle-top-bottom-becomes-nan-with-scroll-view.285490/">Unity Forum</a><br />
+<a href="http://issuetracker.unity3d.com/issues/m-transforminfo-dot-localaabb-dot-isvalid-when-reimporting-the-example-project">Unity Issue Tracker</a><br/>
+The MR Level Editor has a built in fix for this bug ('uMyGUI_ScrollbarHandleUnityFix'). The fix will be applied in the Awake function, therefore you should have no problems at runtime. However, if you feel annoyed by the errors, then you have to find the RectTrasnform with the NaN values and click on the 'FIX' button in the inspector of the uMyGUI_ScrollbarHandleUnityFix script, which is attached to all objects that are affected by this bug.
+<br />
+<br />
+<b><font color="#CC0000">ERROR:</font></b><br />
+Saving works, but cannot load levels, because the level file is not found.<br />
+<b><font color="#00AA00">SOLUTION:</font></b><br />
+I was not able to reproduce this, but it was reported. Maybe it happens on certain OS configurations. If you encounter this bug open the <b>ExampleGame_LoadSave.cs</b> file. The script is very easy and consists of only 75 lines. The line
+<br />
+<b>WWW www = new WWW("file://" + Application.persistentDataPath + "/level.txt");</b>
+<br />
+tells where the system has to search for the level file. Since this is an example anyway and you will probably want to change it, try to use "Application.dataPath" instead of "Application.persistentDataPath" it solved the problem for the bug reporter.
+<br />
+<font color="#888888"><em>Thanks for reporting this issue to <a href="http://www.dropdgames.com/"><u>Prophet</u></a> (working on <a href="http://steamcommunity.com/sharedfiles/filedetails/?id=235787921"><u>Martial Law</u></a>)</em></font>
+<br />
+<br />
+<b><font color="#CC0000">ERROR:</font></b><br />
+<b>Only in v1.01:</b> Error in console when creating a terrain ("A game object can only be in one layer. The layer needs to be in the range [0...31]").<br />
+<em>Since v1.10: you do not need to change anything in your project. However, you will see a warning with instructions as long as you have no "Terrain" layer added. I will keep this warning to make sure that the terrain is not placed in any of your layers that have a special handling. If you do not use layers at all you can safely ignore these warnings.</em>
+<b><font color="#00AA00">SOLUTION:</font></b><br />
+Add "Terrain" layer to the layer list of your project.<br />
+<br />
+<br />
+</body>
+</html>

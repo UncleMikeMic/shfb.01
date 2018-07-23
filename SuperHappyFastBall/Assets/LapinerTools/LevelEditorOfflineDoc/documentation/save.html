@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="save">
+<h1 class="page-title">Save Level</h1>
+<p><strong><big>Summary</big></strong></p>
+To get the byte arrays (data & meta) of a level you have to register for the '<em>LE_EventInterface.OnSave</em>' event, which is triggered when the save button is clicked in the level editor.<br /><br />
+
+<p><strong><big>Step 1: Event Registration</big></strong></p>
+Register for the '<em>LE_EventInterface.OnSave</em>' event. This event will be called when the level is saved. Keep in mind that you also should unregister the event handler when your script gets destroyed otherwise a memory leak could occur.
+<code>
+using LE_LevelEditor.Events;
+</code>
+<code>
+<p class="my_code_comment">// Register for the save event, which is called when the level is saved</p>
+LE_EventInterface.OnSave += OnSave;
+</code>
+
+<p><strong><big>Step 2: Event Handling</big></strong></p>
+The event handler below will access the properties of the '<em>LE_SaveEvent</em>' EventArgs to get the level's byte arrays.
+<code>
+private void OnSave(object p_sender, LE_SaveEvent p_args)<br />
+{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// Get the data and meta data byte arrays from passed EventArgs</p>
+&nbsp;&nbsp;&nbsp;
+	byte[] levelDataAsByteArray = p_args.SavedLevelData;<br />
+&nbsp;&nbsp;&nbsp;
+	byte[] levelMetaAsByteArray = p_args.SavedLevelMeta;<br /><br />
+
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// You level storage code<br />
+&nbsp;&nbsp;&nbsp;
+	// YOU SHOULD ZIP THE LEVEL DATA!<br />
+&nbsp;&nbsp;&nbsp;
+	// YOU CAN SAVE UP TO 95% DATA VOLUME, AVARAGE SEEMS TO BE AROUND 75% REDUCTION</p>
+&nbsp;&nbsp;&nbsp;
+	...<br />
+}
+</code>
+</body>
+</html>

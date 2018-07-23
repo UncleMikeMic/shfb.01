@@ -1,0 +1,21 @@
+﻿using UnityEngine;
+using System.Collections;
+
+namespace LE_LevelEditor.Events
+{
+	public enum LE_ELevelDataChangeType
+	{
+		TERRAIN_LOADED_DEFAULT,
+		TERRAIN_HEIGHTS,
+		TERRAIN_ALPHAMAPS,
+		TERRAIN_TEXTURES,
+		TERRAIN_SELECTION,
+		OBJECT_PLACE,
+		OBJECT_TRANSFORM,
+		OBJECT_RIGIDBODY_SLEEPING_START,
+		OBJECT_COLOR,
+		OBJECT_VARIATION,
+		OBJECT_DELETE,
+		LEVEL_ICON
+	}
+}

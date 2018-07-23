@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a4a57d5f1ef574d8ba81bc5ffbbb04, type: 3}
+  m_Name: Colored_ObjectMap
+  m_EditorClassIdentifier: 
+  m_objectPrefabs:
+  - {fileID: 11400000, guid: 2a59537ef34c7c14c8f0d72870190a62, type: 2}
+  - {fileID: 11400000, guid: 141c6ecf99a3f0c49b9c5209dc74bf4e, type: 2}
+  - {fileID: 11400000, guid: d4aeba1fee8a98d4ebeacbb622a6a616, type: 2}
+  - {fileID: 11400000, guid: 3fc9b05d38d10ba4c9740206fed8f7b4, type: 2}
+  - {fileID: 11400000, guid: 708347c2fd95f9c408bb4bc05a5fea61, type: 2}
+  - {fileID: 11400000, guid: 33d543659ad28f5429b683edfdf88ad3, type: 2}
+  m_objectPrefabResourcePaths:
+  - Objects/Decoration/MixingBarrel
+  - Objects/Simple Shapes/Stationary/Cube
+  - Objects/Simple Shapes/Stationary/Sphere
+  - Objects/Simple Shapes/Stationary/Cylinder
+  - Objects/Simple Shapes/Stationary/Capsule
+  - Objects/Simple Shapes/Stationary/Cone
+  m_subObjectMaps: []

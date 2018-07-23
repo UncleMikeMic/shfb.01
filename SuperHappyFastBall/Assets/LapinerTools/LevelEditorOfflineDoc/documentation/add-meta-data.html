@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="add-meta-data">
+<h1 class="page-title">Add Additional Meta Data</h1>
+<p><strong><big>Summary</big></strong></p>
+The meta data of your level is stored in the '<em>LevelMetaData</em>' class. It allows you to store key-value pairs of strings using the '<em>MetaData</em>' property. In order to add meta data your application must register for the '<em>LE_EventInterface.OnCollectMetaDataBeforeSave</em>' event.<br /><br />
+
+<p><strong><big>Step 1: Event Registration</big></strong></p>
+Register for the '<em>LE_EventInterface.OnCollectMetaDataBeforeSave</em>' event. This event will be called when the level's meta data is saved. Keep in mind that you also should unregister the event handler when your script gets destroyed otherwise a memory leak could occur.
+<code>
+using LE_LevelEditor.Events;
+</code>
+<code>
+<p class="my_code_comment">// Register for the meta data collection event, which is called when the level is saved</p>
+LE_EventInterface.OnCollectMetaDataBeforeSave += OnCollectMetaDataBeforeSave;
+</code>
+
+<p><strong><big>Step 2: Event Handling</big></strong></p>
+The event handler below will add the terrain width and length to the meta data. Additionally, a score value for the gold medal is added. 
+<code>
+private void OnCollectMetaDataBeforeSave(object p_sender, LE_CollectMetaDataEvent p_args)<br />
+{<br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// Try to get the terrain size. Use fallback values if there is no terrain.</p>
+&nbsp;&nbsp;&nbsp;
+	int width = 0;<br />
+&nbsp;&nbsp;&nbsp;
+	int length = 0;<br />
+&nbsp;&nbsp;&nbsp;
+	if (Terrain.activeTerrain != null && Terrain.activeTerrain.terrainData != null)<br />
+&nbsp;&nbsp;&nbsp;
+	{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		width = (int)Terrain.activeTerrain.terrainData.size.x;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		length = (int)Terrain.activeTerrain.terrainData.size.z;<br />
+&nbsp;&nbsp;&nbsp;
+	}<br /><br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// Add collected terrain size values to level meta data</p>
+&nbsp;&nbsp;&nbsp;
+	p_args.LevelMetaData.Add("TerrainWidth", width.ToString());<br />
+&nbsp;&nbsp;&nbsp;
+	p_args.LevelMetaData.Add("TerrainLength", length.ToString());<br /><br />
+<p class="my_code_comment">&nbsp;&nbsp;&nbsp;
+	// Add a value for the gold medal score to level meta data</p>
+&nbsp;&nbsp;&nbsp;
+	p_args.LevelMetaData.Add("GoldScore", 123456);<br />
+}
+</code>
+
+<p><strong><big>Step 3: Load Level Meta Data</big></strong></p>
+When you need the meta data of a level you can easily load it. In this example the terrain size might be needed for the level selection or the gold medal score for the level score evaluation. The code below shows how level meta data can be loaded from a byte array (see <a href="save.html">how to save a level</a>).
+<code>
+using LE_LevelEditor.Core;
+</code>
+<code>
+<p class="my_code_comment">// You will probably load your level's meta data from a file here</p>
+byte[] metaDataAsByteArray = ...;<br /><br />
+<p class="my_code_comment">// Generate a LevelMetaData instance from a byte array. Passing false as last parameter will<br />
+// disable level icon loading. You should do it if you do not need the level icon, because<br />
+// this will drastically reduce the loading time of the meta data. Pass true if you need the level icon</p>
+LE_SaveLoad.LevelMetaData metaData = LE_SaveLoad.LoadLevelMetaFromByteArray(metaDataAsByteArray, false);<br /><br />
+<p class="my_code_comment">// Get the values that you have stored in Step 2.</p>
+int width = 0;<br />
+if (metaData.MetaData.ContainsKey("TerrainWidth"))<br />
+{<br />
+&nbsp;&nbsp;&nbsp;
+	width = int.Parse(metaData.MetaData["TerrainWidth"]);<br />
+}<br />
+int length = 0;<br />
+if (metaData.MetaData.ContainsKey("TerrainLength"))<br />
+{<br />
+&nbsp;&nbsp;&nbsp;
+	length = int.Parse(metaData.MetaData["TerrainLength"]);<br />
+}<br />
+int goldScore = 0;<br />
+if (metaData.MetaData.ContainsKey("GoldScore"))<br />
+{<br />
+&nbsp;&nbsp;&nbsp;
+	goldScore = int.Parse(metaData.MetaData["GoldScore"]);<br />
+}<br /><br />
+<p class="my_code_comment">// Do something with your values</p>
+...
+</code>
+</body>
+</html>

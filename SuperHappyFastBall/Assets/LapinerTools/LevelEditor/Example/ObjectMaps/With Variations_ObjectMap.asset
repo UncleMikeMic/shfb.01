@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a4a57d5f1ef574d8ba81bc5ffbbb04, type: 3}
+  m_Name: With Variations_ObjectMap
+  m_EditorClassIdentifier: 
+  m_objectPrefabs:
+  - {fileID: 11400000, guid: 825894968de2acf488139dcf0a7e3a50, type: 2}
+  - {fileID: 11400000, guid: 2a59537ef34c7c14c8f0d72870190a62, type: 2}
+  - {fileID: 11400000, guid: bbde86998b329e64da762e14baf2b763, type: 2}
+  - {fileID: 11400002, guid: 48835a289168e774598ebcc837df355c, type: 2}
+  m_objectPrefabResourcePaths:
+  - Objects/Buildings/BuildingRundown
+  - Objects/Decoration/MixingBarrel
+  - Objects/Obstacles/Rail
+  - Objects/Obstacles/BoxStraight
+  m_subObjectMaps: []

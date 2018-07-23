@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="hide-editor-tabs">
+<h1 class="page-title">Hide(Remove) Terrain/Object Tabs</h1>
+Since version v1.20 the level editor is completely independent of the UI implementation. However, the '<em>LE_LevelEditorMain</em>' still has two flags '<em>IS_TERRAIN_EDITOR</em>' and '<em>IS_OBJECT_EDITOR</em>' that allow you to disable the terrain or the object editor logic. This will not directly hide the UI, but it will suppress all events related to the terrain or object logic. If '<em>IS_TERRAIN_EDITOR</em>' is set to 'false', then no delegates of the '<em>LE_GUIInterface</em>' starting with '<em>SetTerrain...</em>' will be called, however you also will not be able to call any event handlers or event wrapper functions (callbacks) starting with '<em>OnTerrain...</em>'. Calls with disabled logic will lead to exceptions and errors. It is also not possible to set the level editor edit mode if the logic for this mode is disabled by using the '<em>OnEditMode...</em>' callbacks or events. Take a look at the example scenes '<em>LE_ExampleDungeonEditorGame</em>' and '<em>LE_ExampleEditorTerrainOnly</em>' to see how the editor can be used with a disabled terrain editor or a disabled object editor. In these scenes you can take a detailed look at the '<em>LE_GUIInterface_uGUIimplTerrainOnly</em>' and the '<em>LE_GUIInterface_uGUIimplDungeon</em>' scripts. They handle the UI events. Also compare them to the full editor system '<em>LE_GUIInterface_uGUIimpl</em>'.
+<br />
+<br />
+To improve performance with '<em>IS_TERRAIN_EDITOR</em>' set to 'false' you can remove the '<em>LE_ConfigTerrain.BrushProjector</em>' from the scene and set '<em>LE_ConfigTerrain.Brushes</em>' to an empty array. However, the '<em>LE_ConfigTerrain.TerrainTextureConfig</em>' must be still provided. If you do not use terrain at all and your level files do not have terrains saved, then pass an empty terrain texture config.
+<br />
+To improve performance with '<em>IS_OBJECT_EDITOR</em>' set to 'false' you can remove the '<em>LE_LevelEditorMain.ROOT_OBJECT_MAP</em>'.
+<br />
+<br />
+If you want to use a custom UI, then you can find more information in <a href="custom-ui.html">this article</a>.<br />
+
+</body>
+</html>

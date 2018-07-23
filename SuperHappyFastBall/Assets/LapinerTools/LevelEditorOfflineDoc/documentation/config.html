@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" >
+<head>
+<link rel="stylesheet" href="css/my_custom_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/template.css" type="text/css" />
+</head>
+<body class="config">
+<h1 class="page-title">Easy Configuration</h1>
+Your level editor scene will have a main editor game object with three configurable scripts attached: '<em>LE_LevelEditorMain</em>', '<em>LE_ConfigTerrain</em>' and '<em>LE_ConfigLevel</em>'.
+<table>
+  <tr>
+    <td class="my_table">
+<p><strong><big>LE_LevelEditorMain</big></strong></p>
+<ul>
+  <li type="disc">
+    <b>IS_WITH_CAMERA_PERSPECTIVE_GIZMO:</b> show/hide camera perspective gizmo. Works like the built-in Unity Editor scene view handle: click on the axes to change camera's position and direction; click in the middle to toggle between perspective and orthographic camera view <a href="http://www.freebord-game.com/index.php/camera-perspective-gizmo">(learn more)</a>.
+  </li>
+  <li type="disc">
+    <b>CAMERA_PERSPECTIVE_GIZMO_LAYER:</b> camera perspective gizmo's render layer index. This layer should be excluded from the main camera.
+  </li>
+  <li type="disc">
+    <b>ROOT_OBJECT_MAP:</b> root object map shown in the object editor's tree browser.
+  </li>
+  <li type="disc">
+    <b>IS_OBLIQUE_FOCUS_CENTERING:</b> enable to bring focused objects to the center of the visible screen (not hidden by right menu). On low resolution devices the right menu could use half of the screen. Without the oblique projection only the left half of a big object would be visible, because the right half would be behind the menu.
+  </li>
+  <li type="disc">
+    <b>IS_CAMERA_MOVEMENT:</b> if enabled, then the camera will be controlled by the level editor as described in the help popup.
+  </li>
+  <li type="disc">
+    <b>IS_TERRAIN_EDITOR:</b> if enabled, then the terrain editor logic will be initialized and terrain related events handled (<a href="hide-editor-tabs.html">learn more</a>).
+  </li>
+  <li type="disc">
+    <b>IS_OBJECT_EDITOR:</b> if enabled, then the object editor logic will be initialized and object related events handled (<a href="hide-editor-tabs.html">learn more</a>).
+  </li>
+  <li type="disc">
+    <b>ACTIVE_KEY_COMBOS:</b> a flag enum that allows you to activate or deactivate key combinations like the 'F'-key to 'FOCUS' and 'Ctrl+D' to 'DUPLICATE'. Take into account that key combinations for undo/redo (since v1.30) work without the 'Ctrl' key when tested in the Unity Editor. If you press 'Ctrl+Z', then the Unity Editor undo function is executed. If you press only 'Z', then the Multiplatform Runtime Level Editor undo function is executed.
+  </li>
+</ul>
+
+
+<p><strong><big>LE_ConfigTerrain</big></strong></p>
+<ul>
+  <li type="disc">
+    <b>BrushProjector:</b> scene object with a '<em>Projector</em>' component that will be used to project the terrain edit brush. Can be 'null' if '<em>LE_LevelEditorMain.IS_TERRAIN_EDITOR</em>' is 'false'.
+  </li>
+  <li type="disc">
+    <b>Brushes:</b> array with selectable brush textures <a href="terrain-brushes.html">(learn more)</a>.
+  </li>
+  <li type="disc">
+    <b>TerrainTextureConfig:</b> terrain texture configuration <a href="terrain-textures.html">(learn more)</a>.
+  </li>
+  <li type="disc">
+    <b>CustomDefaultTerrain:</b> set a predefined Unity terrain scene object <a href="custom-terrain.html">(learn more)</a>.
+  </li>
+  <li type="disc">
+    <b>TerrainLayer:</b> created/loaded terrains will be moved to this layer. Raycast layer for terrain editing and terrain snapped object placement.
+  </li>
+  <li type="disc">
+    <b>HeightmapResolutionSizes:</b> float array with increasing size limits. Must have the same length as '<em>HeightmapResolutions</em>'. When a terrain is created, then the used resolution index (from '<em>HeightmapResolutions</em>') will be the highest index, that has a smaller or equal size (in '<em>HeightmapResolutionSizes</em>') than the terrain width and length. In the example on the right a terrain with 200 units size would get a heightmap resolution of 65 and a terrain with a size of 300 would have a resolution of 129.
+  </li>
+  <li type="disc">
+    <b>HeightmapResolutions:</b> int array with increasing heightmap resolutions. Must have the same length as '<em>HeightmapResolutionSizes</em>'. Values must be power of two plus 1.
+  </li>
+  <li type="disc">
+    <b>AlphamapResolutionSizes:</b> float array with increasing size limits. Must have the same length as '<em>AlphamapResolutions</em>'. When a terrain is created, then the used resolution index (from '<em>AlphamapResolutions</em>') will be the highest index, that has a smaller or equal size (in '<em>AlphamapResolutionSizes</em>') than the terrain width and length. In the example on the right a terrain with 200 units size would get a heightmap resolution of 64 and a terrain with a size of 300 would have a resolution of 128.
+  </li>
+  <li type="disc">
+    <b>AlphamapResolutions:</b> int array with increasing alphamap resolutions. Must have the same length as '<em>AlphamapResolutionSizes</em>'. Values must be power of two.
+  </li>
+  <li type="disc">
+    <b>MaxTextureCount:</b> the maximal count of textures that a terrain can have. It will be not possible to add more textures when the limit is reached.
+  </li>
+  <li type="disc">
+    <b>IsBaseTextureSelection:</b> player can choose a base texture for his terrain if enabled. The first texture from the '<em>TerrainTextureConfig</em>' will be used if disabled.
+  </li>
+  <li type="disc">
+    <b>InitialWidth:</b> the default width value in the create terrain menu.
+  </li>
+  <li type="disc">
+    <b>InitialHeight:</b> the default height value in the create terrain menu.
+  </li>
+  <li type="disc">
+    <b>InitialLength:</b> the default length value in the create terrain menu.
+  </li>
+</ul>
+
+
+<p><strong><big>LE_ConfigLevel</big></strong></p>
+<ul>
+  <li type="disc">
+    <b>IsRemoveDuplicatesOnSave:</b> if enabled, then objects that have an equal resource path, position, rotation and scale are detected as duplicate. Only one duplicate is saved, the others are destroyed. Users often generate duplicates by clicking the 'duplicate' button or using Ctrl+D.
+  </li>
+  <li type="disc">
+    <b>LevelIconWidth:</b> the width of the level icon texture that is captured when the 'Render Level Icon' button is clicked.
+  </li>
+  <li type="disc">
+    <b>LevelIconHeight:</b> the height of the level icon texture that is captured when the 'Render Level Icon' button is clicked.
+  </li>
+</ul>
+    </td>
+    <td>
+&nbsp
+    </td>
+    <td>
+<img src="MultiplatformRuntimeLevelEditor_EasyConfiguration.png" border="0" title="Multiplatform Runtime Level Editor Easy Configuration.png"/>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
