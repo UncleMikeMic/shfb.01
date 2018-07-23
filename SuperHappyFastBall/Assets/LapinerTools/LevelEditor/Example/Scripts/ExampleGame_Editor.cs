@@ -234,7 +234,7 @@ namespace LE_LevelEditor.Example
 		private bool IsLevelPlayable(out string o_errorMessage)
 		{
 			// check if player position is defined
-		//	GameObject goPlayerStart = GameObject.Find("Objects/PlayerStartPosition");
+			GameObject goPlayerStart = GameObject.Find("Objects/PlayerStartPosition");
 			if (goPlayerStart == null)
 			{
                 o_errorMessage = "";

@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Locker
+  - brick
+  - gm
+  - sm
+  - paddle
+  - ball
   layers:
   - Default
   - TransparentFX
