@@ -8,4 +8,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/LapinerTools/LevelEditor/Example/Scenes/LE_ExampleDungeonEditorGame.unity
+    guid: d082c0b97d483ae42a0195a5ee7f137e
+  - enabled: 1
+    path: Assets/LapinerTools/LevelEditor/Example/Scenes/LE_ExampleEditor.unity
+    guid: 029bea9c818149244bfe9513aaae22e8
+  - enabled: 1
+    path: Assets/LapinerTools/LevelEditor/Example/Scenes/LE_ExampleEditorFirstPerson.unity
+    guid: 3b3fecee7a5d67f44807fe0a3aec9cc7
+  - enabled: 1
+    path: Assets/LapinerTools/LevelEditor/Example/Scenes/LE_ExampleEditorTerrainOnly.unity
+    guid: 5359894a4c2963649a11f1e1f87f8f91
+  - enabled: 1
+    path: Assets/LapinerTools/LevelEditor/Example/Scenes/LE_ExampleGame.unity
+    guid: 3e8e8fc90a455e04394f13c079bebf32
   m_configObjects: {}
