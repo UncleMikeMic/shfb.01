@@ -43,10 +43,12 @@ public class GameManager : MonoBehaviour {
     public Transform ballSpawnLocation;
     public Rigidbody ballPrefab;
     Rigidbody ballInstance;
-    public float spawnTime;
+    public float spawnTimeMin = 3;
+    public float spawnTimeMax = 7;
     private float timeLeft;
-    public float launchForce;
-    public float horizontalOffset;
+    public float launchForceMin = 1500;
+    public float launchForceMax = 2500;
+    public float horizontalOffset = 33;
     public GameObject ballSpawnParticles;
 
     //ball text vars
@@ -246,7 +248,7 @@ public class GameManager : MonoBehaviour {
         //  spawn ball
         ballInstance = Instantiate(ballPrefab, ballSpawnLocation.position, ballSpawnLocation.rotation) as Rigidbody;
         //make ball move
-        ballInstance.AddForce(ballSpawnLocation.forward * launchForce + ballSpawnLocation.right * Random.Range(-horizontalOffset, horizontalOffset));
+        ballInstance.AddForce(ballSpawnLocation.forward * Random.Range(launchForceMin, launchForceMax) + ballSpawnLocation.right * Random.Range(-horizontalOffset, horizontalOffset));
 
         //sfx
         AudioController.Play("ballSpawn");
@@ -255,7 +257,7 @@ public class GameManager : MonoBehaviour {
         Instantiate(ballSpawnParticles, ballSpawnLocation.position, ballSpawnLocation.rotation);
 
         //reset ball spawn timre
-        timeLeft = spawnTime;
+        timeLeft = Random.Range(spawnTimeMin, spawnTimeMax);
         //increment balls on scoreboard
         balls++;
         ballsText.text = "Balls:" + balls.ToString("D3");

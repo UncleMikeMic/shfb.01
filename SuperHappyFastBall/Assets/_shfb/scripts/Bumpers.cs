@@ -23,18 +23,7 @@ public class Bumpers : MonoBehaviour {
     public GameObject spawnPrefab;
     public GameObject prefabSpawnParticles;
 
-    [Header("shake scale")]
-    //scale stuff 
-    public bool shakeScale = false;
-    public float shakeDuration = .5f;
-    // The shake strength. Using a Vector3 instead of a float lets you choose the strength for each axis.
-    public float shakeStrength = .25f;
-    // Indicates how much will the shake vibrate.
-    public int shakeVibrato = 2;
-    //Indicates how much the shake will be random (0 to 180 - values higher than 90 kind of suck, so beware). Setting it to 0 will shake along a single direction. 
-    public float shakeRandomness = 11f;
-    //If TRUE the shake will automatically fadeOut smoothly within the tween's duration, otherwise it will not.
-    public bool shakeFadeOut = true;
+   
 
     [Header("lerpScale")]
     public bool lerpScaleOn = true;
@@ -111,13 +100,6 @@ public class Bumpers : MonoBehaviour {
                 Instantiate(prefabSpawnParticles, prefabSpawnLocation.position, prefabSpawnLocation.rotation);
             }
 
-            if (shakeScale == true)
-            {
-
-                transform.DOShakeScale(shakeDuration, shakeStrength, shakeVibrato, shakeRandomness, shakeFadeOut);
-               
-
-            }
 
             if(lerpScaleOn == true)
             {

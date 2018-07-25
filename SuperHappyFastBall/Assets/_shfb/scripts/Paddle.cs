@@ -6,8 +6,30 @@ public class Paddle : MonoBehaviour
     public float freedom = 22.5F;
     public bool canMove;
 
+    [Header ("bumper stuff")]
+    public GameManager gm;
+    public int paddlePoints = 1;
+    public int paddleSound = 0;
+
+    [Header("lerpScale")]
+    public bool lerpScaleOn = true;
+    Vector3 originalScale;
+    private Vector3 newScale;
+    public float scaleMultiplier = 1.1f;
+    private bool repeatable;
+    public float lerpSpeed = 10f;
+    public float lerpDuration = .5f;
+
+    void OnEnable()
+    {
+        originalScale = transform.localScale;
+        newScale = originalScale * scaleMultiplier;
+    }
+
     private void Start()
     {
+        //connect to the game manager script and store as variable "gm"
+        gm = GameObject.FindWithTag("gm").GetComponent<GameManager>();
         canMove = true;
     }
 
@@ -54,5 +76,48 @@ public class Paddle : MonoBehaviour
 
         
         
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("ball"))
+        {
+            //sfx
+            AudioController.Play("paddle" + paddleSound);
+
+            if (lerpScaleOn == true)
+            {
+                StartCoroutine("LerpScale");
+            }
+
+            //raise score and coins in the game manager by set amount for this object
+            gm.score += paddlePoints;
+            gm.coins += paddlePoints;
+
+            //updates scoreboard
+            gm.IncrementScore();
+        }
+    }
+
+    IEnumerator LerpScale()
+    {
+        repeatable = true;
+        while (repeatable)
+        {
+            yield return RepeatLerp(originalScale, newScale, lerpDuration);
+            yield return RepeatLerp(newScale, originalScale, lerpDuration);
+            repeatable = false;
+        }
+    }
+
+    public IEnumerator RepeatLerp(Vector3 a, Vector3 b, float time)
+    {
+        float i = 0.0f;
+        float rate = (1.0f / time) * lerpSpeed;
+        while (i < 1.0f)
+        {
+            i += Time.deltaTime * rate;
+            transform.localScale = Vector3.Lerp(a, b, i);
+            yield return null;
+        }
     }
 }
