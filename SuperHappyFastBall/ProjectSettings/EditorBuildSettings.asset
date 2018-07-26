@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_shfb/scenes/mainMenu.unity
+    guid: c8024c54392827741ae6b1844bda5cbe
+  - enabled: 1
+    path: Assets/_shfb/scenes/level1.unity
+    guid: b6fc1d0c956fba74585b39219fe46043
+  - enabled: 1
+    path: Assets/_shfb/scenes/level2.unity
+    guid: 94befef14d826aa409866a5375e9afbd
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1

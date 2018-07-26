@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Material: {fileID: 21751313986590038}
   Mesh: {fileID: 43769865896778098}
-  Version: 8001
+  Version: 8200
   ImpostorType: 1
   LockedSizes: 1
   SelectedSize: 2048
@@ -23,9 +23,9 @@ MonoBehaviour:
   VerticalFrames: 16
   PixelPadding: 32
   BufferMask: -1
-  NormalScale: 0
-  Tolerance: 0.1524
   MaxVertices: 8
+  Tolerance: 0.1524
+  NormalScale: 0
   ShapePoints:
   - {x: 0.15, y: 0.12}
   - {x: 0.15, y: 0.921875}
@@ -80,6 +80,7 @@ Material:
     m_Floats:
     - _Bias: -2
     - _Clip: 0.5
+    - _ClipMask: 0.5
     - _DepthSize: 1.5870785
     - _Frames: 16
     - _Hemi: 0
@@ -87,6 +88,7 @@ Material:
     - _ImpostorSize: 1.2811216
     - _Parallax: 1
     - _ShadowBias: 0.25
+    - _TextureBias: -1
     m_Colors:
     - _HueVariation: {r: 0, g: 0, b: 0, a: 0}
     - _Offset: {r: 0.0041795224, g: 0.0013485551, b: 0.002849102, a: 0}
@@ -102,7 +104,6 @@ Mesh:
     firstByte: 0
     indexCount: 18
     topology: 0
-    baseVertex: 0
     firstVertex: 0
     vertexCount: 8
     localAABB:
@@ -120,7 +121,6 @@ Mesh:
   m_IsReadable: 1
   m_KeepVertices: 1
   m_KeepIndices: 1
-  m_IndexFormat: 0
   m_IndexBuffer: 070005000300030001000700070006000500050004000300030002000100010000000700
   m_Skin: []
   m_VertexData:

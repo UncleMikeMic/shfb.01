@@ -11,12 +11,12 @@ namespace AmplifyImpostors
 	{
 		public const byte Major = 0;
 		public const byte Minor = 8;
-		public const byte Release = 2;
-		public const byte Revision = 0;
+		public const byte Release = 3;
+		public static byte Revision = 0;
 
 		public static string StaticToString()
 		{
-			return string.Format( "{0}.{1}.{2}r{3}", Major, Minor, Release, Revision );
+			return string.Format( "{0}.{1}.{2}", Major, Minor, Release ) + ( Revision > 0 ? "r" + Revision.ToString() : "" );
 		}
 
 		public static int FullNumber { get { return Major * 10000 + Minor * 1000 + Release * 100 + Revision; } }

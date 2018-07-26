@@ -1,5 +1,14 @@
 Release Notes:
 
+v0.8.3
+* Fixes:
+    * Fixed issue with spot/point lights not casting shadows properly
+    * Fixed issue where the emission texture would randomly bake a white texture
+    * Fixed issue of albedo texture becoming darker when project was in gamma space
+* Improvements:
+    * Baker no longer changes the read/write option of texture importer
+    * Emission and Specular textures now default to black when not present
+
 v0.8.2
 * Fixes:
     * Fixed shader compilation errors on Android (gles3)

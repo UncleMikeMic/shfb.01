@@ -7,8 +7,8 @@ Shader "Hidden/Amplify Impostors/Spherical Impostor"
 	{
 		[NoScaleOffset]_Albedo("Albedo & Alpha", 2D) = "white" {}
 		[NoScaleOffset]_Normals("Normals & Depth", 2D) = "white" {}
-		[NoScaleOffset]_Specular("Specular & Smoothness", 2D) = "white" {}
-		[NoScaleOffset]_Emission("Emission & Occlusion", 2D) = "white" {}
+		[NoScaleOffset]_Specular("Specular & Smoothness", 2D) = "black" {}
+		[NoScaleOffset]_Emission("Emission & Occlusion", 2D) = "black" {}
 		_ClipMask("Clip", Range( 0 , 1)) = 0.5
 		_TextureBias("Texture Bias", Float) = -1
 		_ShadowBias("Shadow Bias", Range( 0 , 2)) = 0.25
@@ -26,145 +26,6 @@ Shader "Hidden/Amplify Impostors/Spherical Impostor"
 		CGINCLUDE
 		#pragma target 3.0
 		#define UNITY_SAMPLE_FULL_SH_PER_PIXEL 1
-		#include "UnityCG.cginc"
-		#include "UnityPBSLighting.cginc"
-		uniform float _FramesX;
-		uniform float _FramesY;
-		uniform float _ImpostorSize;
-		uniform float _TextureBias;
-		uniform sampler2D _Albedo;
-		uniform sampler2D _Normals;
-		uniform sampler2D _Specular;
-		uniform sampler2D _Emission;
-		uniform float _DepthSize;
-		uniform float _ClipMask;
-		uniform float _ShadowBias;
-		uniform float4 _Offset;
-
-		#ifdef EFFECT_HUE_VARIATION
-			half4 _HueVariation;
-		#endif
-
-		inline void SphereImpostorVertex( inout appdata_full v, inout float2 frameUVs, inout float4 viewPos )
-		{
-			// INPUTS
-			float sizeX = _FramesX;
-			float sizeY = _FramesY - 1; // adjusted
-			float3 fractions = 1 / float3( sizeX, _FramesY, sizeY );
-			float2 sizeFraction = fractions.xy;
-			float axisSizeFraction = fractions.z;
-
-			// Basic data
-			v.vertex.xyz += _Offset.xyz;
-			float3 worldOrigin = float3(unity_ObjectToWorld[0].w, unity_ObjectToWorld[1].w, unity_ObjectToWorld[2].w);
-			#if defined(UNITY_PASS_SHADOWCASTER)
-				float3 worldCameraPos = 0;
-				if( unity_LightShadowBias.y == 0 ) // Collector or Caster?
-					worldCameraPos = _WorldSpaceCameraPos;
-				else
-					worldCameraPos = UnityWorldSpaceLightDir(mul(unity_ObjectToWorld, v.vertex).xyz) * -5000;
-			#else
-				float3 worldCameraPos = _WorldSpaceCameraPos;
-			#endif
-			float3 objectCameraDirection = normalize( mul( (float3x3)unity_WorldToObject, worldCameraPos - worldOrigin ) - _Offset.xyz );
-
-			// Create orthogonal vectors to define the billboard
-			float3 upVector = float3( 0,1,0 );
-			float3 objectHorizontalVector = normalize( cross( objectCameraDirection, upVector ) );
-			float3 objectVerticalVector = cross( objectHorizontalVector, objectCameraDirection );
-
-			// Create vertical radial angle
-			float verticalAngle = frac( atan2( -objectCameraDirection.z, -objectCameraDirection.x ) / UNITY_TWO_PI ) * sizeX + 0.5;
-
-			// Create horizontal radial angle
-			float verticalDot = dot( objectCameraDirection, upVector );
-			float upAngle = ( acos( -verticalDot ) / UNITY_PI ) + axisSizeFraction * 0.5f;
-			float yRot = sizeFraction.x * UNITY_PI * verticalDot * ( 2 * frac( verticalAngle ) - 1 );
-
-			// Billboard rotation
-			float2 uvExpansion = v.texcoord.xy - 0.5;
-			float cosY = cos( yRot );
-			float sinY = sin( yRot );
-			float2 uvRotator = mul( uvExpansion, float2x2( cosY , -sinY , sinY , cosY ) ) * _ImpostorSize;
-
-			// Billboard
-			float3 billboard = objectHorizontalVector * uvRotator.x + objectVerticalVector * uvRotator.y + _Offset.xyz;
-
-			// Frame coords
-			float2 relativeCoords = float2( floor( verticalAngle ), min( floor( upAngle * sizeY ), sizeY ) );
-			float2 frameUV = ( v.texcoord.xy + relativeCoords ) * sizeFraction;
-
-			frameUVs.xy = frameUV;
-			viewPos.xyz = UnityObjectToViewPos( billboard );
-
-			#ifdef EFFECT_HUE_VARIATION
-				float hueVariationAmount = frac(unity_ObjectToWorld[0].w + unity_ObjectToWorld[1].w + unity_ObjectToWorld[2].w);
-				viewPos.w = saturate(hueVariationAmount * _HueVariation.a);
-			#endif
-
-			v.vertex.xyz = billboard;
-			v.normal.xyz = objectCameraDirection;
-		}
-
-		inline void SphereImpostorFragment( inout SurfaceOutputStandardSpecular o, out float4 clipPos, out float3 worldPos, float2 frameUV, float4 viewPos )
-		{
-			float4 albedoSample = tex2Dbias( _Albedo, float4( frameUV, 0, _TextureBias) );
-			float4 normalSample = tex2Dbias( _Normals, float4( frameUV, 0, _TextureBias) );
-			float4 specularSample = tex2Dbias( _Specular, float4( frameUV, 0, _TextureBias) );
-			float4 emissionSample = tex2Dbias( _Emission, float4( frameUV, 0, _TextureBias) );
-
-			// Simple outputs
-			float3 albedo = albedoSample.rgb;
-			float3 emission = emissionSample.rgb;
-			float3 specular = specularSample.rgb;
-			float smoothness = specularSample.a;
-			float occlusion = emissionSample.a;
-			float alphaMask = albedoSample.a;
-
-			// Normal
-			float4 remapNormal = normalSample * 2 - 1; // object normal is remapNormal.rgb
-			float3 worldNormal = normalize( mul( (float3x3)unity_ObjectToWorld, remapNormal.xyz ) );
-
-			// Depth
-			float depth = remapNormal.a * _DepthSize * 0.5;
-			#if defined(UNITY_PASS_SHADOWCASTER)
-			if( unity_LightShadowBias.y != 0 )
-			{
-				depth = depth * 0.95 - 0.05  - _ShadowBias;
-			}
-			#endif
-			viewPos.z += depth;
-
-			// Modified clip position and world position
-			worldPos = mul( UNITY_MATRIX_I_V, float4( viewPos.xyz, 1 ) ).xyz;
-
-			clipPos = mul( UNITY_MATRIX_P, float4( viewPos.xyz, 1 ) );
-			#ifdef UNITY_PASS_SHADOWCASTER
-				clipPos = UnityApplyLinearShadowBias( clipPos );
-			#endif
-			clipPos.xyz /= clipPos.w;
-			if( UNITY_NEAR_CLIP_VALUE < 0 )
-				clipPos = clipPos * 0.5 + 0.5;
-
-			#ifdef EFFECT_HUE_VARIATION
-				half3 shiftedColor = lerp(albedo.rgb, _HueVariation.rgb, viewPos.w);
-				half maxBase = max(albedo.r, max(albedo.g, albedo.b));
-				half newMaxBase = max(shiftedColor.r, max(shiftedColor.g, shiftedColor.b));
-				maxBase /= newMaxBase;
-				maxBase = maxBase * 0.5f + 0.5f;
-				shiftedColor.rgb *= maxBase;
-				albedo.rgb = saturate(shiftedColor);
-			#endif
-
-			o.Albedo = albedo;
-			o.Normal = worldNormal;
-			o.Emission = emission;
-			o.Specular = specular;
-			o.Smoothness = smoothness;
-			o.Occlusion = occlusion;
-			o.Alpha = ( alphaMask - _ClipMask );
-			clip( o.Alpha );
-		}
 		ENDCG
 
 		Tags { "RenderType"="Opaque" "Queue"="Geometry+0" "DisableBatching"="True" }
@@ -204,6 +65,8 @@ Shader "Hidden/Amplify Impostors/Spherical Impostor"
 			#include "UnityPBSLighting.cginc"
 			#include "AutoLight.cginc"
 			#include "UnityStandardUtils.cginc"
+
+			#include "AmplifyImpostors.cginc"
 
 			#pragma shader_feature EFFECT_HUE_VARIATION
 
@@ -377,6 +240,8 @@ Shader "Hidden/Amplify Impostors/Spherical Impostor"
 			#include "AutoLight.cginc"
 			#include "UnityStandardUtils.cginc"
 
+			#include "AmplifyImpostors.cginc"
+
 			#pragma shader_feature EFFECT_HUE_VARIATION
 
 			struct v2f_surf {
@@ -478,6 +343,8 @@ Shader "Hidden/Amplify Impostors/Spherical Impostor"
 			#include "Lighting.cginc"
 			#include "UnityPBSLighting.cginc"
 			#include "UnityStandardUtils.cginc"
+
+			#include "AmplifyImpostors.cginc"
 
 			#pragma shader_feature EFFECT_HUE_VARIATION
 
@@ -659,6 +526,8 @@ Shader "Hidden/Amplify Impostors/Spherical Impostor"
 			#include "UnityStandardUtils.cginc"
 			#include "UnityMetaPass.cginc"
 
+			#include "AmplifyImpostors.cginc"
+
 			#pragma shader_feature EFFECT_HUE_VARIATION
 
 			struct v2f_surf {
@@ -734,16 +603,15 @@ Shader "Hidden/Amplify Impostors/Spherical Impostor"
 			#endif
 			#include "UnityShaderVariables.cginc"
 			#include "UnityShaderUtilities.cginc"
-			//#ifndef UNITY_PASS_SHADOWCASTER
-			//#define UNITY_PASS_SHADOWCASTER
-			//#endif
-			#pragma multi_compile UNITY_PASS_SHADOWCASTER
+			#ifndef UNITY_PASS_SHADOWCASTER
+			#define UNITY_PASS_SHADOWCASTER
+			#endif
 			#include "UnityCG.cginc"
 			#include "Lighting.cginc"
 			#include "UnityPBSLighting.cginc"
 			#include "UnityStandardUtils.cginc"
 
-			//float4x4 unity_WorldToLight;
+			#include "AmplifyImpostors.cginc"
 
 			struct v2f_surf {
 				V2F_SHADOW_CASTER;

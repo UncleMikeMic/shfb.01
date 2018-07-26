@@ -207,11 +207,10 @@ namespace AmplifyImpostors
 		{
 			Texture2D outfile = AssetDatabase.LoadAssetAtPath<Texture2D>( path );
 			TextureImporter tImporter = AssetImporter.GetAtPath( path ) as TextureImporter;
-			if( tImporter != null /*&& !tImporter.isReadable*/ )
+			if( tImporter != null )
 			{
 				if( tImporter.sRGBTexture != sRGB || ( changeResolution && tImporter.maxTextureSize != (int)m_data.TexSize.x ) )
 				{
-					tImporter.isReadable = true;
 					tImporter.sRGBTexture = sRGB;
 					if( changeResolution )
 						tImporter.maxTextureSize = (int)m_data.TexSize.x;
@@ -576,13 +575,16 @@ namespace AmplifyImpostors
 			RenderTexture.ReleaseTemporary( tempTex );
 			RenderTexture.ReleaseTemporary( tempTex2 );
 
+			// Fix Albedo
+			PackingRemapping( ref m_rtGBuffers[ 0 ], ref m_rtGBuffers[ 0 ], 5, packerMat, m_rtGBuffers[ 1 ] );
+
 			// Pack Depth
 			PackingRemapping( ref m_rtGBuffers[ 2 ], ref m_rtGBuffers[ 2 ], 0, packerMat, m_trueDepth );
 
 			// Fix Emission
-//#if UNITY_2017_3_OR_NEWER
-				PackingRemapping( ref m_rtGBuffers[ 3 ], ref m_rtGBuffers[ 3 ], 1, packerMat );
-//#endif
+#if UNITY_2017_3_OR_NEWER
+			PackingRemapping( ref m_rtGBuffers[ 3 ], ref m_rtGBuffers[ 3 ], 1, packerMat );
+#endif
 			DestroyImmediate( packerMat );
 			packerMat = null;
 
@@ -1139,6 +1141,9 @@ namespace AmplifyImpostors
 									}
 								}
 							}
+
+							// Only useful for 2017.1 and 2017.2
+							commandBuffer.EnableShaderKeyword( "UNITY_HDR_ON" );
 
 							Matrix4x4 localMatrix = m_rootTransform.worldToLocalMatrix * childTransform.localToWorldMatrix;
 							if( impostorMaps )
